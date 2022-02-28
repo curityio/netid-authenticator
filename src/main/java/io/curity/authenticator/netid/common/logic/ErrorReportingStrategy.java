@@ -69,7 +69,7 @@ public final class ErrorReportingStrategy
 
     private RuntimeException redirectToFailedPath(String errorMessage)
     {
-        var url =  _informationProvider.getFullyQualifiedAuthenticationUri() + "/" + _pollerPaths.getFailedPath();
+        var url = _informationProvider.getFullyQualifiedAuthenticationUri() + "/" + _pollerPaths.getFailedPath();
 
         _sessionManager.put(Attribute.of(
                 AttributeName.of(PollingAuthenticatorConstants.SessionKeys.ERROR_MESSAGE),

@@ -97,11 +97,12 @@ public final class LaunchRequestLogic
 
     public Optional<AuthenticationResult> get(LaunchRequestModel requestModel, Response response)
     {
-        return get(requestModel, response, it -> {});
+        return get(requestModel, response, it -> {
+        });
     }
 
     public Optional<AuthenticationResult> get(LaunchRequestModel requestModel, Response response,
-            Consumer<ImmutableMap.Builder<String, Object>> modelUpdate)
+                                              Consumer<ImmutableMap.Builder<String, Object>> modelUpdate)
     {
         LaunchRequestModel.Get model = requestModel.getGetRequestModel();
 

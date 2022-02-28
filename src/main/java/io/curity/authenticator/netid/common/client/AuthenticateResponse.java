@@ -24,8 +24,10 @@ public class AuthenticateResponse
 {
     private final String _transactionId;
     private final String _autoStartToken;
-    @Nullable private final String _qrStartToken;
-    @Nullable private final String _qrStartSecret;
+    @Nullable
+    private final String _qrStartToken;
+    @Nullable
+    private final String _qrStartSecret;
 
     private AuthenticateResponse(Builder builder)
     {
@@ -61,8 +63,10 @@ public class AuthenticateResponse
     {
         private final String _transactionId;
         private final String _autoStartToken;
-        @Nullable private String _qrStartToken = null;
-        @Nullable private String _qrStartSecret = null;
+        @Nullable
+        private String _qrStartToken = null;
+        @Nullable
+        private String _qrStartSecret = null;
 
         public Builder(String transactionId, String autoStartToken)
         {

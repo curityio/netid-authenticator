@@ -28,10 +28,10 @@ public class CollectResponse
     private final CollectStatus _status;
 
     @Nullable
-    private transient AuthenticationAttributes _authenticationAttributes;
+    private final transient AuthenticationAttributes _authenticationAttributes;
 
     @Nullable
-    private String _subject;
+    private final String _subject;
 
     public CollectResponse(CollectStatus collectStatus)
     {

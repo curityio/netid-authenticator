@@ -37,7 +37,6 @@ import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformat
 import se.curity.identityserver.sdk.web.Response;
 
 import javax.annotation.Nullable;
-
 import java.util.Optional;
 
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.EndUserMessageKeys.GENERAL_ERROR;
@@ -156,7 +155,7 @@ public class WebServicePoller
         var failUrl = _informationProvider.getFullyQualifiedAuthenticationUri(
                 // The poller error is the only resource which does not abide by ErrorReportingStrategy.
                 // Instead, we only consider the StatusCodeMapping to define the HTTP status code.
-                ) + "/" + _pollerPaths.getFailedPath();
+        ) + "/" + _pollerPaths.getFailedPath();
 
         boolean fatalError = collectFaultStatus == null || collectFaultStatus.isFatal();
         HttpStatus httpStatus = _statusCodeMapping.pollingFailure(fatalError);
@@ -222,8 +221,6 @@ public class WebServicePoller
             _logger.debug("Getting authenticated user from state...");
 
             // Get Authentication Result from state
-
-
             @Nullable var sessionAttributes = _sessionManager.get(RESULT_ATTRIBUTES);
             @Nullable var sessionSubject = _sessionManager.get(RESULT_SUBJECT);
 

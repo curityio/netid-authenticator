@@ -64,12 +64,16 @@ public final class FailedRequestModel
         {
             var listOfMessages = request.getQueryParameterValues(PollingAuthenticatorConstants.FormValueNames.ERROR_MESSAGE);
 
-            if (listOfMessages != null && listOfMessages.size() > 0) {
-                if (listOfMessages.size() > 1) {
+            if (listOfMessages != null && listOfMessages.size() > 0)
+            {
+                if (listOfMessages.size() > 1)
+                {
                     throw new InvalidParameterException(PollingAuthenticatorConstants.FormValueNames.ERROR_MESSAGE, "Invalid parameter");
                 }
                 _incomingErrorMessage = listOfMessages.stream().findFirst().orElse(UNKNOWN_ERROR);
-            } else {
+            }
+            else
+            {
                 _incomingErrorMessage = UNKNOWN_ERROR;
             }
 

@@ -44,7 +44,7 @@ public class NullUtils
     {
         return valueOrError(optionalValueOfType(type, value), errorDescription);
     }
-    
+
     public static <T> void ifNotNull(@Nullable T value, Consumer<T> useValue)
     {
         if (value != null)
@@ -74,7 +74,8 @@ public class NullUtils
         else
         {
             var result = transform.apply(value);
-            if (result == null) {
+            if (result == null)
+            {
                 return defaultValueSupplier.get();
             }
 

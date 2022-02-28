@@ -18,7 +18,7 @@ package io.curity.authenticator.netid.common.utils;
 
 public class SdkConstants
 {
-    public static final String ACTION ="_action";
+    public static final String ACTION = "_action";
 
     public static final String CSP_OVERRIDE_CHILD_SRC = "_cspChildSrc";
 

@@ -26,7 +26,6 @@ import se.curity.identityserver.sdk.service.SessionManager;
 import se.curity.identityserver.sdk.web.Request;
 
 import javax.annotation.Nullable;
-
 import java.util.Optional;
 
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.POLLING_DONE;
@@ -70,9 +69,12 @@ public final class LaunchRequestModel
     {
         @NotEmpty(message = "validation.error.autostarttoken.required")
         private final String _autoStartToken;
-        @Nullable private final String _qrStartToken;
-        @Nullable private final String _qrStartSecret;
-        @Nullable private final Long _initTime;
+        @Nullable
+        private final String _qrStartToken;
+        @Nullable
+        private final String _qrStartSecret;
+        @Nullable
+        private final Long _initTime;
 
         @Range(min = 0, max = 20)
         private final int _launchCount;

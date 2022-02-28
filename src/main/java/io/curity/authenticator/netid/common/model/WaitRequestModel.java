@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import se.curity.identityserver.sdk.web.Request;
 
 import javax.annotation.Nullable;
-
 import java.util.Optional;
 
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.POLLING_DONE;

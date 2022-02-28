@@ -33,7 +33,7 @@ public abstract class PollingResult implements ResponseModel
 
     private enum ResultType
     {
-        SUCCESS, FAILED, PENDING;
+        SUCCESS, FAILED, PENDING
     }
 
     private static final String POLLER_STOP_POLLING_KEY = "stopPolling";
@@ -112,7 +112,8 @@ public abstract class PollingResult implements ResponseModel
         private final String _messageId;
         private final String _pollUrl;
         private final String _cancelUrl;
-        @Nullable private final String _qrCode;
+        @Nullable
+        private final String _qrCode;
 
         public Pending(String messageId, String pollUrl, String cancelUrl, @Nullable String qrCode)
         {

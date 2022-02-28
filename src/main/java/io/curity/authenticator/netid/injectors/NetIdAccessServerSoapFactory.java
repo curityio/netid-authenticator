@@ -70,7 +70,7 @@ public final class NetIdAccessServerSoapFactory
     }
 
     private static void configureWebserviceClient(BindingProvider bindingProvider,
-                                                 String endpoint)
+                                                  String endpoint)
     {
         Map<String, Object> bindingProviderRequestContext = bindingProvider.getRequestContext();
 

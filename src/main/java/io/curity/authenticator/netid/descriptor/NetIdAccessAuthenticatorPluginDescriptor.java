@@ -35,7 +35,7 @@ import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants
 
 public final class NetIdAccessAuthenticatorPluginDescriptor
         implements AuthenticatorPluginDescriptor<NetIdAccessConfig>
-//        , SdkPluginComposer
+        //        , SdkPluginComposer
 {
     @Override
     public Class<? extends NetIdAccessConfig> getConfigurationType()

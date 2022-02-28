@@ -47,9 +47,12 @@ public class WebServiceUtils
         {
             Throwable cause = Throwables.getRootCause(ex);
             String errorMessage;
-            if (cause.getMessage() != null) {
+            if (cause.getMessage() != null)
+            {
                 errorMessage = cause.getMessage();
-            } else {
+            }
+            else
+            {
                 errorMessage = "No additional details";
             }
 
