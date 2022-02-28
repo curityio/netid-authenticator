@@ -282,7 +282,7 @@ public class WebServicePoller
                 if (authenticatedState.isAuthenticated() && !authenticatedState.getUsername().equals(subject))
                 {
                     _logger.debug(
-                            "BankID authenticated subject '{}' does not match authenticated state subject '{}'",
+                            "Net ID authenticated subject '{}' does not match authenticated state subject '{}'",
                             subject,
                             authenticatedState.getUsername()
                     );
