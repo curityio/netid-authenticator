@@ -27,6 +27,7 @@ import io.curity.authenticator.netid.client.PollingClientAuthenticateException;
 import io.curity.authenticator.netid.client.PollingClientException;
 import io.curity.authenticator.netid.client.UnknownUserNameException;
 import io.curity.authenticator.netid.ErrorReportingStrategy;
+import io.curity.authenticator.netid.injectors.NetIdAccessServerSoapFactory;
 import io.curity.authenticator.netid.model.PollerPaths;
 import io.curity.authenticator.netid.model.UserNameGetModel;
 import io.curity.authenticator.netid.model.UserNamePostModel;
@@ -81,14 +82,14 @@ public final class EnterUserNameRequestHandler
 
     private static final Logger _logger = LoggerFactory.getLogger(EnterUserNameRequestHandler.class);
 
-    public EnterUserNameRequestHandler(AuthenticatedState authenticatedState, NetIdAccessConfig configuration, NetIdAccessClient client)
+    public EnterUserNameRequestHandler(AuthenticatedState authenticatedState, NetIdAccessConfig configuration)
     {
         _authenticatedState = authenticatedState;
         _exceptionFactory = configuration.getExceptionFactory();
         _informationProvider = configuration.getAuthenticatorInformationProvider();
         _sessionManager = configuration.getSessionManager();
         _userPreferenceManager = configuration.getUserPreferenceManager();
-        _netIdAccessClient = client;
+        _netIdAccessClient = new NetIdAccessClient(configuration, new NetIdAccessServerSoapFactory(configuration));
     }
 
     @Override

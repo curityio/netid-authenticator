@@ -63,9 +63,12 @@ public final class NetIdAccessAuthenticatorPluginDescriptor
         return "netidaccess-os";
     }
 
-    @Override
-    public Optional<NetIdAccessClient> createManagedObject(NetIdAccessConfig configuration)
-    {
-        return Optional.of(new NetIdAccessClient(configuration, new NetIdAccessServerSoapFactory(configuration)));
-    }
+    // TODO the client can be managed object, but I have to figure out the Provider implementation problem first.
+    // It's easier to debug when the client is not a managed object.
+
+    //    @Override
+//    public Optional<NetIdAccessClient> createManagedObject(NetIdAccessConfig configuration)
+//    {
+//        return Optional.of(new NetIdAccessClient(configuration, new NetIdAccessServerSoapFactory(configuration)));
+//    }
 }
