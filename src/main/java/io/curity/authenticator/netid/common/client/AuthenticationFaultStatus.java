@@ -35,17 +35,7 @@ public enum AuthenticationFaultStatus
     SIGN_VALIDATION_FAILED(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
     RETRY(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
     INTERNAL_ERROR(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
-    ALREADY_IN_PROGRESS(PollingAuthenticatorConstants.EndUserMessageKeys.IN_PROGRESS),
-    // BankId v2 Json API error codes
-    alreadyInProgress(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
-    invalidParameters(PollingAuthenticatorConstants.EndUserMessageKeys.INVALID_PARAMETERS),
-    unauthorized(PollingAuthenticatorConstants.EndUserMessageKeys.ACCESS_DENIED_RP),
-    notFound(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
-    requestTimeout(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
-    unsupportedMediaType(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
-    internalError(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
-    Maintenance(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR);
-
+    ALREADY_IN_PROGRESS(PollingAuthenticatorConstants.EndUserMessageKeys.IN_PROGRESS);
     /**
      * Message key to show user
      */

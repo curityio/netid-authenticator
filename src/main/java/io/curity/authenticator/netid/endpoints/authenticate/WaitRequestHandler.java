@@ -16,39 +16,94 @@
 
 package io.curity.authenticator.netid.endpoints.authenticate;
 
-import io.curity.authenticator.netid.common.logic.WaitRequestLogic;
+import com.google.common.collect.ImmutableMap;
+import io.curity.authenticator.netid.client.NetIdAccessClient;
+import io.curity.authenticator.netid.common.client.WebServicePoller;
+import io.curity.authenticator.netid.common.model.PollerPaths;
 import io.curity.authenticator.netid.common.model.WaitRequestModel;
+import io.curity.authenticator.netid.common.model.WaitResponseModel;
+import io.curity.authenticator.netid.config.NetIdAccessConfig;
+import se.curity.identityserver.sdk.authentication.AuthenticatedState;
 import se.curity.identityserver.sdk.authentication.AuthenticationResult;
 import se.curity.identityserver.sdk.authentication.AuthenticatorRequestHandler;
+import se.curity.identityserver.sdk.http.HttpStatus;
 import se.curity.identityserver.sdk.web.Request;
 import se.curity.identityserver.sdk.web.Response;
+import se.curity.identityserver.sdk.web.ResponseModel;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
+
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.EndUserMessageKeys.START_APP;
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.CANCEL_URL;
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.FAILURE_URL;
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.POLL_URL;
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.RESTART_URL;
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.SERVICE_MESSAGE;
+import static io.curity.authenticator.netid.common.utils.SdkConstants.ACTION;
+import static io.curity.authenticator.netid.config.PluginComposer.getPollerPaths;
+import static io.curity.authenticator.netid.config.PluginComposer.getStatusCodeMapping;
 
 public final class WaitRequestHandler implements AuthenticatorRequestHandler<WaitRequestModel>
 {
-    private final WaitRequestLogic _logic;
+    private final NetIdAccessConfig _config;
+    private final AuthenticatedState _authenticatedState;
+    private final NetIdAccessClient _netIdAccessClient;
+    private WebServicePoller _webservicePoller;
+    private PollerPaths _pollerPaths;
 
-    public WaitRequestHandler(WaitRequestLogic logic)
+    public WaitRequestHandler(NetIdAccessConfig configuration, AuthenticatedState authenticatedState, NetIdAccessClient client)
     {
-        _logic = logic;
+        _config = configuration;
+        _authenticatedState = authenticatedState;
+        _netIdAccessClient = client;
     }
 
     @Override
     public WaitRequestModel preProcess(Request request, Response response)
     {
-        return _logic.preProcess(request, response);
+        _pollerPaths = getPollerPaths(request);
+
+        if (request.isPostRequest())
+        {
+            _webservicePoller = new WebServicePoller(
+                    _netIdAccessClient,
+                    _pollerPaths,
+                    _config.getSessionManager(),
+                    _config.getAuthenticatorInformationProvider(),
+                    _config.getExceptionFactory(),
+                    _authenticatedState,
+                    getStatusCodeMapping(request)
+            );
+        }
+
+        response.setResponseModel(ResponseModel.templateResponseModel(ImmutableMap.of(),
+                "wait/index"), Response.ResponseModelScope.NOT_FAILURE);
+
+        return new WaitRequestModel(request);
     }
 
     @Override
     public Optional<AuthenticationResult> get(WaitRequestModel requestModel, Response response)
     {
-        return _logic.get(response, null);
+        var authenticationUri = _config.getAuthenticatorInformationProvider().getFullyQualifiedAuthenticationUri();
+        ImmutableMap.Builder<String, Object> map = ImmutableMap.<String, Object>builder()
+                .put(SERVICE_MESSAGE, START_APP)
+                .put(ACTION, authenticationUri.getPath() + "/" + _pollerPaths.getPollerPath() + "?" + authenticationUri.getQuery())
+                .put(RESTART_URL, authenticationUri.getPath())
+                .put(CANCEL_URL, authenticationUri + "/" + _pollerPaths.getCancelPath())
+                .put(FAILURE_URL, authenticationUri + "/" + _pollerPaths.getFailedPath())
+                .put(POLL_URL, authenticationUri + "/" + _pollerPaths.getPollerPath());
+        response.setResponseModel(new WaitResponseModel(map.build()), HttpStatus.OK);
+
+        return Optional.empty();
     }
 
     @Override
     public Optional<AuthenticationResult> post(WaitRequestModel requestModel, Response response)
     {
-        return _logic.post(requestModel.getPostRequestModel().isPollingDone(), response, null);
+        @Nullable AuthenticationResult result = _webservicePoller.getAuthenticationResult(
+                requestModel.getPostRequestModel().isPollingDone(), response);
+        return Optional.ofNullable(result);
     }
 }

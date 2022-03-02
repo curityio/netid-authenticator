@@ -17,16 +17,18 @@
 package io.curity.authenticator.netid.descriptor;
 
 import com.google.common.collect.ImmutableMap;
+import io.curity.authenticator.netid.client.NetIdAccessClient;
 import io.curity.authenticator.netid.config.NetIdAccessConfig;
 import io.curity.authenticator.netid.endpoints.authenticate.CancelRequestHandler;
 import io.curity.authenticator.netid.endpoints.authenticate.EnterUserNameRequestHandler;
 import io.curity.authenticator.netid.endpoints.authenticate.FailedRequestHandler;
 import io.curity.authenticator.netid.endpoints.authenticate.LaunchRequestHandler;
 import io.curity.authenticator.netid.endpoints.authenticate.WaitRequestHandler;
+import io.curity.authenticator.netid.injectors.NetIdAccessServerSoapFactory;
 import se.curity.identityserver.sdk.authentication.AuthenticatorRequestHandler;
-//import se.curity.identityserver.sdk.plugin.DependencyInjectionBinder;
-//import se.curity.identityserver.sdk.plugin.SdkPluginComposer;
 import se.curity.identityserver.sdk.plugin.descriptor.AuthenticatorPluginDescriptor;
+
+import java.util.Optional;
 
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.Endpoints.CANCEL;
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.Endpoints.FAILED;
@@ -35,7 +37,6 @@ import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants
 
 public final class NetIdAccessAuthenticatorPluginDescriptor
         implements AuthenticatorPluginDescriptor<NetIdAccessConfig>
-        //        , SdkPluginComposer
 {
     @Override
     public Class<? extends NetIdAccessConfig> getConfigurationType()
@@ -57,27 +58,14 @@ public final class NetIdAccessAuthenticatorPluginDescriptor
     @Override
     public String getPluginImplementationType()
     {
+        // TODO - this should be "netidaccess" before publishing the plugin.
+        // For now it's different so that both plugins can be used in CIS for testing.
         return "netidaccess-os";
     }
 
-
-/*
     @Override
-    public void composePlugin(DependencyInjectionBinder binder)
+    public Optional<NetIdAccessClient> createManagedObject(NetIdAccessConfig configuration)
     {
-        binder.addType(ErrorReportingStrategy.class);
-        binder.addDynamicBinding(PollerPaths.class, new PollerPathsFactoryInjector());
-        binder.addDynamicBinding(WaitRequestLogic.class, new WaitRequestLogicFactoryInjector());
-        binder.addInstance(LaunchRequestLogic.UriScheme.class,
-                new LaunchRequestLogic.UriScheme(LaunchRequestHandler.SCHEME));
-        binder.addType(LaunchRequestLogic.class);
-        binder.addType(PollingAuthenticatorEnterUserNameLogic.class);
-        binder.addType(NetIdAccessServerSoapFactory.class);
-        binder.addType(PollingClient.class, NetIdAccessClient.class, NetIdAccessClient.class);
-        binder.addDynamicBinding(WebServicePoller.StatusCodeMapping.class,
-                new WebServicePollerHttpStatusMappingFactoryInjector());
-        binder.addType(WebServicePoller.class);
+        return Optional.of(new NetIdAccessClient(configuration, new NetIdAccessServerSoapFactory(configuration)));
     }
-
- */
 }

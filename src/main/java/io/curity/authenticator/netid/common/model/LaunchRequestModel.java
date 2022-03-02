@@ -31,8 +31,6 @@ import java.util.Optional;
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.POLLING_DONE;
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.SessionKeys.AUTOSTART_TOKEN;
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.SessionKeys.INIT_TIME;
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.SessionKeys.QR_START_SECRET;
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.SessionKeys.QR_START_TOKEN;
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.SessionKeys.SESSION_LAUNCH_COUNT;
 
 public final class LaunchRequestModel
@@ -70,10 +68,6 @@ public final class LaunchRequestModel
         @NotEmpty(message = "validation.error.autostarttoken.required")
         private final String _autoStartToken;
         @Nullable
-        private final String _qrStartToken;
-        @Nullable
-        private final String _qrStartSecret;
-        @Nullable
         private final Long _initTime;
 
         @Range(min = 0, max = 20)
@@ -82,13 +76,9 @@ public final class LaunchRequestModel
         public Get(SessionManager sessionManager)
         {
             @Nullable var autoStartTokenSession = sessionManager.get(AUTOSTART_TOKEN);
-            @Nullable var qrStartTokenSession = sessionManager.get(QR_START_TOKEN);
-            @Nullable var qrStartSecretSession = sessionManager.get(QR_START_SECRET);
             @Nullable var initTimeSession = sessionManager.get(INIT_TIME);
 
             _autoStartToken = NullUtils.mapOptionalAttribute(autoStartTokenSession, it -> it.getOptionalValueOfType(String.class), () -> "");
-            _qrStartToken = NullUtils.map(qrStartTokenSession, it -> it.getValueOfType(String.class));
-            _qrStartSecret = NullUtils.map(qrStartSecretSession, it -> it.getValueOfType(String.class));
             _initTime = NullUtils.map(initTimeSession, it -> it.getValueOfType(Long.class));
 
             _launchCount = NullUtils.mapOptionalAttribute(sessionManager.get(SESSION_LAUNCH_COUNT),
@@ -103,18 +93,6 @@ public final class LaunchRequestModel
         public int getLaunchCount()
         {
             return _launchCount;
-        }
-
-        @Nullable
-        public String getQrStartToken()
-        {
-            return _qrStartToken;
-        }
-
-        @Nullable
-        public String getQrStartSecret()
-        {
-            return _qrStartSecret;
         }
 
         @Nullable

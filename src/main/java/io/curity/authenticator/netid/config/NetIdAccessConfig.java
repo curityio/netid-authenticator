@@ -21,8 +21,11 @@ import se.curity.identityserver.sdk.config.annotation.DefaultInteger;
 import se.curity.identityserver.sdk.config.annotation.DefaultString;
 import se.curity.identityserver.sdk.config.annotation.Description;
 import se.curity.identityserver.sdk.config.annotation.Name;
+import se.curity.identityserver.sdk.service.ExceptionFactory;
 import se.curity.identityserver.sdk.service.HttpClient;
 import se.curity.identityserver.sdk.service.SessionManager;
+import se.curity.identityserver.sdk.service.UserPreferenceManager;
+import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformationProvider;
 
 public interface NetIdAccessConfig extends Configuration
 {
@@ -45,4 +48,10 @@ public interface NetIdAccessConfig extends Configuration
     HttpClient getHttpClient();
 
     SessionManager getSessionManager();
+
+    ExceptionFactory getExceptionFactory();
+
+    AuthenticatorInformationProvider getAuthenticatorInformationProvider();
+
+    UserPreferenceManager getUserPreferenceManager();
 }

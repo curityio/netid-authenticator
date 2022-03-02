@@ -53,18 +53,6 @@ public class NullUtils
         }
     }
 
-    public static <T, R> R map(@Nullable T value, Function<T, R> transform, Supplier<R> defaultValueSupplier)
-    {
-        if (value == null)
-        {
-            return defaultValueSupplier.get();
-        }
-        else
-        {
-            return transform.apply(value);
-        }
-    }
-
     public static <R> R mapOptionalAttribute(@Nullable Attribute value, Function<Attribute, R> transform, Supplier<R> defaultValueSupplier)
     {
         if (value == null)

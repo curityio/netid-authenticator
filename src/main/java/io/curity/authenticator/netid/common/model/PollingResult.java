@@ -43,7 +43,6 @@ public abstract class PollingResult implements ResponseModel
     private static final String CANCEL_URL = "cancelUrl";
     private static final String REDIRECT_URL = "redirectUrl";
     private static final String USER_MESSAGE = "userMessage";
-    private static final String QR_CODE = "qrCode";
 
     private final boolean _stopPolling;
 
@@ -112,24 +111,20 @@ public abstract class PollingResult implements ResponseModel
         private final String _messageId;
         private final String _pollUrl;
         private final String _cancelUrl;
-        @Nullable
-        private final String _qrCode;
 
-        public Pending(String messageId, String pollUrl, String cancelUrl, @Nullable String qrCode)
+        public Pending(String messageId, String pollUrl, String cancelUrl)
         {
             super(false);
             _messageId = StringUtils.isBlank(messageId) ? "" : messageId;
             _pollUrl = pollUrl;
             _cancelUrl = cancelUrl;
-            _qrCode = qrCode;
         }
 
         private Pending(Map<String, Object> map)
         {
             this(PollingResult.extractMessageEntry(map, USER_MESSAGE),
                     NullUtils.valueOrError(String.class, map.get(POLLER_URL), POLLER_URL + " is missing"),
-                    NullUtils.valueOrError(String.class, map.get(CANCEL_URL), CANCEL_URL + " is missing"),
-                    PollingResult.extractMessageEntryOrNull(map, QR_CODE));
+                    NullUtils.valueOrError(String.class, map.get(CANCEL_URL), CANCEL_URL + " is missing"));
         }
 
         @Override
@@ -167,18 +162,11 @@ public abstract class PollingResult implements ResponseModel
         public Map<String, Object> getViewData()
         {
             ImmutableMap.Builder<Object, Object> message = ImmutableMap.builder().put(USER_MESSAGE, _messageId);
-            NullUtils.ifNotNull(getQrCode(), it -> message.put(QR_CODE, it));
             return baseModelBuilder()
                     .put(POLLER_MESSAGE_KEY, message.build())
                     .put(POLLER_URL, _pollUrl)
                     .put(CANCEL_URL, _cancelUrl)
                     .build();
-        }
-
-        @Nullable
-        public String getQrCode()
-        {
-            return _qrCode;
         }
     }
 

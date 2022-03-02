@@ -17,24 +17,15 @@
 
 package io.curity.authenticator.netid.common.client;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 public class AuthenticateResponse
 {
     private final String _transactionId;
     private final String _autoStartToken;
-    @Nullable
-    private final String _qrStartToken;
-    @Nullable
-    private final String _qrStartSecret;
 
     private AuthenticateResponse(Builder builder)
     {
         _transactionId = builder._transactionId;
         _autoStartToken = builder._autoStartToken;
-        _qrStartToken = builder._qrStartToken;
-        _qrStartSecret = builder._qrStartSecret;
     }
 
     public String getTransactionId()
@@ -47,43 +38,15 @@ public class AuthenticateResponse
         return _autoStartToken;
     }
 
-    @Nullable
-    public String getQrStartToken()
-    {
-        return _qrStartToken;
-    }
-
-    @Nullable
-    public String getQrStartSecret()
-    {
-        return _qrStartSecret;
-    }
-
     public static final class Builder
     {
         private final String _transactionId;
         private final String _autoStartToken;
-        @Nullable
-        private String _qrStartToken = null;
-        @Nullable
-        private String _qrStartSecret = null;
 
         public Builder(String transactionId, String autoStartToken)
         {
             _transactionId = transactionId;
             _autoStartToken = autoStartToken;
-        }
-
-        public Builder setQrStartToken(@Nonnull String qrStartToken)
-        {
-            _qrStartToken = qrStartToken;
-            return this;
-        }
-
-        public Builder setQrStartSecret(@Nonnull String qrStartSecret)
-        {
-            _qrStartSecret = qrStartSecret;
-            return this;
         }
 
         public AuthenticateResponse build()

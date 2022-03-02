@@ -48,9 +48,7 @@ public class PollingAuthenticatorConstants
         public static final String POLL_URL = "_pollUrl";
         public static final String POLLING_DONE = "_pollingDone";
         public static final String AUTOSTART_TOKEN = "_autostartToken";
-        public static final String AUTOSTART_TOKEN_DATA_URI = "_autostartTokenDataUri";
         public static final String FORM_LAUNCH_COUNT = "_launchCount";
-        public static final String QR_CODE = "_qrCode";
     }
 
     public static class EndUserMessageKeys
@@ -160,8 +158,6 @@ public class PollingAuthenticatorConstants
         public static final String SESSION_LAUNCH_COUNT = "POLLING_LAUNCH_COUNT";
         public static final String AUTOSTART_TOKEN = "POLLING_AUTOSTART_TOKEN";
         public static final String USE_SAME_DEVICE = "POLLING_USE_SAME_DEVICE";
-        public static final String QR_START_TOKEN = "POLLING_QR_START_TOKEN";
-        public static final String QR_START_SECRET = "POLLING_QR_START_SECRET";
         public static final String INIT_TIME = "POLLING_INIT_TIME";
 
         public static final ImmutableCollection<String> all = ImmutableList.of(
@@ -173,8 +169,6 @@ public class PollingAuthenticatorConstants
                 SESSION_LAUNCH_COUNT,
                 AUTOSTART_TOKEN,
                 USE_SAME_DEVICE,
-                QR_START_TOKEN,
-                QR_START_SECRET,
                 INIT_TIME
         );
     }

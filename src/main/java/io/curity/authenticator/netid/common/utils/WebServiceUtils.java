@@ -58,7 +58,7 @@ public class WebServiceUtils
 
             if (cause instanceof SocketTimeoutException && retries < MAX_RETRY_COUNT)
             {
-                _logger.info("Caught an exception from Encap. Error was {}. Retrying (attempts: {}, retries: {})",
+                _logger.info("Caught an exception from NetID. Error was {}. Retrying (attempts: {}, retries: {})",
                         errorMessage, retries + 1, retries);
 
                 return callWebServiceWithRetry(webServiceCall, retries + 1, throwOnError);

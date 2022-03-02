@@ -20,7 +20,6 @@ import io.curity.authenticator.netid.common.GenericError;
 import io.curity.authenticator.netid.common.PollingAuthenticatorConstants;
 import io.curity.authenticator.netid.common.model.PollerPaths;
 import io.curity.authenticator.netid.common.model.PollingResult;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.curity.identityserver.sdk.attribute.Attribute;
@@ -79,7 +78,7 @@ public class WebServicePoller
         _statusCodeMapping = statusCodeMapping;
     }
 
-    private void poll(Response response, String transactionId, boolean useSameDevice, @Nullable String qrCode)
+    private void poll(Response response, String transactionId, boolean useSameDevice)
     {
         _logger.trace("Polling for authentication status for transaction ID/OrderRef {}", transactionId);
 
@@ -111,8 +110,6 @@ public class WebServicePoller
         {
             _logger.trace("Indicating to poller that authentication has completed");
 
-            // TODO: Verify result, check not-before, after etc?
-
             //Tell the poller we're ready
             pollSuccess(response); // Sets status to 202 (depending on mapping)
 
@@ -136,7 +133,7 @@ public class WebServicePoller
         HttpStatus httpStatus = _statusCodeMapping.keepPolling();
         var pollUrl = _informationProvider.getFullyQualifiedAuthenticationUri() + "/" + _pollerPaths.getPollerPath();
         var cancelUrl = _informationProvider.getFullyQualifiedAuthenticationUri() + "/" + _pollerPaths.getCancelPath();
-        response.setResponseModel(new PollingResult.Pending(messageId, pollUrl, cancelUrl, qrCode), httpStatus);
+        response.setResponseModel(new PollingResult.Pending(messageId, pollUrl, cancelUrl), httpStatus);
         response.setHttpStatus(httpStatus);
     }
 
@@ -184,22 +181,9 @@ public class WebServicePoller
      * @param response      http response
      * @return result if the authentication was finished, null otherwise
      */
-    public AuthenticationResult getAuthenticationResult(boolean isPollingDone, Response response)
-    {
-        return getAuthenticationResult(isPollingDone, response, null);
-    }
-
-    /**
-     * Poll for authentication result
-     *
-     * @param isPollingDone true if the client claims its finished
-     * @param response      http response
-     * @param qrCode        qrCode if present
-     * @return result if the authentication was finished, null otherwise
-     */
     @Nullable
     public AuthenticationResult getAuthenticationResult(
-            boolean isPollingDone, Response response, @Nullable String qrCode)
+            boolean isPollingDone, Response response)
     {
         boolean authenticationComplete = Optional.ofNullable(_sessionManager.get(AUTHENTICATION_STATE))
                 .map(attribute -> attribute.getOptionalValueOfType(Boolean.class))
@@ -253,7 +237,7 @@ public class WebServicePoller
         }
         else
         {
-            poll(response, transactionId, useSameDevice, qrCode);
+            poll(response, transactionId, useSameDevice);
         }
 
         return null;
@@ -283,8 +267,8 @@ public class WebServicePoller
                 {
                     _logger.debug(
                             "Net ID authenticated subject '{}' does not match authenticated state subject '{}'",
-                            subject,
-                            authenticatedState.getUsername()
+                            subject.charAt(0) + "...",
+                            authenticatedState.getUsername().charAt(0) + "..."
                     );
                 }
             }
@@ -298,7 +282,7 @@ public class WebServicePoller
 
         if (_logger.isDebugEnabled())
         {
-            _logger.debug("User {} authenticated", StringUtils.replace(subject, "....$", "XXXX"));
+            _logger.debug("User {} authenticated", subject);
         }
 
         return new AuthenticationResult(authenticationAttributes);
@@ -319,62 +303,3 @@ public class WebServicePoller
     }
 }
 
-/**
- * Custom HTTP status codes that are understood by the Curity JavaScript Poller at
- * {@code se.curity.utils.poller.startPolling}.
- * <p>
- * These status codes do not follow known HTTP semantics, but as they have been used for a long time as of writing,
- * we may not change them without causing likely breakages on customers, which would benefit no one. So here we
- * "formalize" the custom scheme and have to just live with it.
- */
-final class CustomPollerStatusCodes implements WebServicePoller.StatusCodeMapping
-{
-    static final CustomPollerStatusCodes INSTANCE = new CustomPollerStatusCodes();
-
-    @Override
-    public HttpStatus keepPolling()
-    {
-        return HttpStatus.CREATED;
-    }
-
-    @Override
-    public HttpStatus pollingFailure(boolean isFatalError)
-    {
-        // legacy logic - the JS poller will "see" the failure redirect without concern for the status code
-        return HttpStatus.CREATED;
-    }
-
-    @Override
-    public HttpStatus pollingDone()
-    {
-        return HttpStatus.ACCEPTED;
-    }
-}
-
-/**
- * A more HTTP-friendly status code mapping for the poller.
- * <p>
- * May be injected into the {@link WebServicePoller} to change status codes it reports.
- */
-final class SemanticHttpPollerStatusCodeMapping implements WebServicePoller.StatusCodeMapping
-{
-    public static final SemanticHttpPollerStatusCodeMapping INSTANCE = new SemanticHttpPollerStatusCodeMapping();
-
-    @Override
-    public HttpStatus keepPolling()
-    {
-        return HttpStatus.OK;
-    }
-
-    @Override
-    public HttpStatus pollingFailure(boolean isFatalError)
-    {
-        return isFatalError ? HttpStatus.BAD_REQUEST : HttpStatus.OK;
-    }
-
-    @Override
-    public HttpStatus pollingDone()
-    {
-        return HttpStatus.OK;
-    }
-}

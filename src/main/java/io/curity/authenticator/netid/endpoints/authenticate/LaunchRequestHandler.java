@@ -16,40 +16,168 @@
 
 package io.curity.authenticator.netid.endpoints.authenticate;
 
-import io.curity.authenticator.netid.common.logic.LaunchRequestLogic;
+import com.google.common.collect.ImmutableMap;
+import io.curity.authenticator.netid.client.NetIdAccessClient;
+import io.curity.authenticator.netid.common.PollingAuthenticatorConstants;
+import io.curity.authenticator.netid.common.client.WebServicePoller;
+import io.curity.authenticator.netid.common.model.AuthenticationCompletedResponseModel;
 import io.curity.authenticator.netid.common.model.LaunchRequestModel;
+import io.curity.authenticator.netid.common.model.LaunchResponseModel;
+import io.curity.authenticator.netid.common.model.PollerPaths;
+import io.curity.authenticator.netid.common.model.PollingResult;
+import io.curity.authenticator.netid.config.NetIdAccessConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.curity.identityserver.sdk.attribute.Attribute;
+import se.curity.identityserver.sdk.attribute.AttributeName;
+import se.curity.identityserver.sdk.authentication.AuthenticatedState;
 import se.curity.identityserver.sdk.authentication.AuthenticationResult;
 import se.curity.identityserver.sdk.authentication.AuthenticatorRequestHandler;
+import se.curity.identityserver.sdk.http.HttpStatus;
+import se.curity.identityserver.sdk.service.ExceptionFactory;
+import se.curity.identityserver.sdk.service.SessionManager;
+import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformationProvider;
 import se.curity.identityserver.sdk.web.Request;
 import se.curity.identityserver.sdk.web.Response;
+import se.curity.identityserver.sdk.web.ResponseModel;
 
+import javax.annotation.Nullable;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.AUTOSTART_TOKEN;
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.CANCEL_URL;
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.FAILURE_URL;
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.FORM_LAUNCH_COUNT;
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.POLL_URL;
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.RESTART_URL;
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.RETURN_TO_URL;
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.SessionKeys.AUTHENTICATION_STATE;
+import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.SessionKeys.SESSION_LAUNCH_COUNT;
+import static io.curity.authenticator.netid.common.utils.SdkConstants.ACTION;
+import static io.curity.authenticator.netid.common.utils.SdkConstants.CSP_OVERRIDE_CHILD_SRC;
+import static io.curity.authenticator.netid.config.PluginComposer.getPollerPaths;
+import static io.curity.authenticator.netid.config.PluginComposer.getStatusCodeMapping;
 
 public final class LaunchRequestHandler implements AuthenticatorRequestHandler<LaunchRequestModel>
 {
-    public static final String SCHEME = "netid";
-    private final LaunchRequestLogic _logic;
+    private static final String SCHEME = "netid";
+    private static final Logger _logger = LoggerFactory.getLogger(LaunchRequestHandler.class);
+    private final AuthenticatorInformationProvider _informationProvider;
+    private WebServicePoller _webservicePoller;
+    private PollerPaths _pollerPaths;
+    private final SessionManager _sessionManager;
+    private final NetIdAccessClient _netIdAccessClient;
+    private final ExceptionFactory _exceptionFactory;
+    private final AuthenticatedState _authenticatedState;
 
-    public LaunchRequestHandler(LaunchRequestLogic logic)
+    public LaunchRequestHandler(NetIdAccessConfig configuration, NetIdAccessClient client, AuthenticatedState authenticatedState)
     {
-        _logic = logic;
+        _informationProvider = configuration.getAuthenticatorInformationProvider();
+        _sessionManager = configuration.getSessionManager();
+        _authenticatedState = authenticatedState;
+        _exceptionFactory = configuration.getExceptionFactory();
+        _netIdAccessClient = client;
     }
 
     @Override
     public LaunchRequestModel preProcess(Request request, Response response)
     {
-        return _logic.preProcess(request, response);
+        _pollerPaths = getPollerPaths(request);
+        _webservicePoller = new WebServicePoller(
+                _netIdAccessClient,
+                _pollerPaths,
+                _sessionManager,
+                _informationProvider,
+                _exceptionFactory,
+                _authenticatedState,
+                getStatusCodeMapping(request)
+        );
+
+        response.setResponseModel(ResponseModel.templateResponseModel(ImmutableMap.of(),
+                        "launch/index"),
+                Response.ResponseModelScope.NOT_FAILURE);
+
+        return new LaunchRequestModel(request, _sessionManager);
     }
 
     @Override
     public Optional<AuthenticationResult> get(LaunchRequestModel requestModel, Response response)
     {
-        return _logic.get(requestModel, response);
+        LaunchRequestModel.Get model = requestModel.getGetRequestModel();
+
+        // Check if we're already done
+        _webservicePoller.getAuthenticationResult(false, response);
+
+        var authenticationUri = _informationProvider.getFullyQualifiedAuthenticationUri();
+
+        boolean error = _sessionManager.get(PollingAuthenticatorConstants.SessionKeys.ERROR_MESSAGE) != null;
+
+        if (!error)
+        {
+            response.setHttpStatus(HttpStatus.OK); // The poller set this to 201. Change back to 200.
+        }
+
+        boolean authenticationComplete = Optional
+                .ofNullable(_sessionManager.get(AUTHENTICATION_STATE))
+                .map(attribute -> attribute.getOptionalValueOfType(Boolean.class))
+                .orElse(false);
+
+        if (authenticationComplete)
+        {
+            response.setResponseModel(new AuthenticationCompletedResponseModel(
+                    authenticationUri + "/" + _pollerPaths.getPollerPath(),
+                    true
+            ), HttpStatus.OK);
+
+            response.setHttpStatus(HttpStatus.OK);
+
+            return Optional.empty();
+        }
+
+        var returnToUrl = authenticationUri + "/" + _pollerPaths.getLauncherPath();
+
+        String autostartToken = URLEncoder.encode(model.getAutoStartToken(), StandardCharsets.UTF_8);
+        int launchCount = model.getLaunchCount();
+
+        _logger.trace("Auto-start token = {}", autostartToken);
+        _logger.debug("Setting launch count to {}", launchCount);
+
+        var queryString = authenticationUri.getQuery();
+
+        ImmutableMap.Builder<String, Object> modelBuilder = ImmutableMap.<String, Object>builder()
+                .put(AUTOSTART_TOKEN, autostartToken)
+                .put(RETURN_TO_URL, URLEncoder.encode(returnToUrl, StandardCharsets.UTF_8))
+                .put(RESTART_URL, authenticationUri.getPath())
+                .put(CANCEL_URL, authenticationUri + "/" + _pollerPaths.getCancelPath())
+                .put(FAILURE_URL, authenticationUri + "/" + _pollerPaths.getFailedPath())
+                .put(ACTION, authenticationUri.getPath() + "/" + _pollerPaths.getLauncherPath() + "?" + queryString)
+                .put(POLL_URL, authenticationUri + "/" + _pollerPaths.getPollerPath())
+                .put(CSP_OVERRIDE_CHILD_SRC, "child-src 'self' " + SCHEME + ":;")
+                .put(FORM_LAUNCH_COUNT, launchCount);
+
+        // because we invoked the webPoller above, we need to override the
+        // response model key here...
+        PollingResult.removePollerTypeResponseModelKey(modelBuilder);
+
+        response.setResponseModel(new LaunchResponseModel(modelBuilder.build()), HttpStatus.OK);
+
+        response.setHttpStatus(HttpStatus.OK);
+
+        _sessionManager.put(Attribute.of(
+                AttributeName.of(SESSION_LAUNCH_COUNT),
+                launchCount + 1
+        ));
+
+        return Optional.empty();
     }
 
     @Override
     public Optional<AuthenticationResult> post(LaunchRequestModel requestModel, Response response)
     {
-        return _logic.post(requestModel.getPostRequestModel().isPollingDone(), response);
+        @Nullable AuthenticationResult result = _webservicePoller.getAuthenticationResult(
+                requestModel.getPostRequestModel().isPollingDone(), response);
+        return Optional.ofNullable(result);
     }
 }

@@ -17,14 +17,11 @@
 package io.curity.authenticator.netid.common.model;
 
 import io.curity.authenticator.netid.common.utils.NullUtils;
-import se.curity.identityserver.sdk.Nullable;
 import se.curity.identityserver.sdk.web.ResponseModel;
 
 import java.util.Map;
-import java.util.Optional;
 
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.AUTOSTART_TOKEN;
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.AUTOSTART_TOKEN_DATA_URI;
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.CANCEL_URL;
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.FAILURE_URL;
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.FORM_LAUNCH_COUNT;
@@ -33,7 +30,6 @@ import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants
 import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.RETURN_TO_URL;
 import static io.curity.authenticator.netid.common.utils.SdkConstants.ACTION;
 import static io.curity.authenticator.netid.common.utils.SdkConstants.CSP_OVERRIDE_CHILD_SRC;
-import static io.curity.authenticator.netid.common.utils.SdkConstants.CSP_OVERRIDE_IMG_SRC;
 
 
 public final class LaunchResponseModel implements ResponseModel
@@ -100,43 +96,9 @@ public final class LaunchResponseModel implements ResponseModel
                 "formLaunchCount is null");
     }
 
-    public Optional<QrCodeOptions> getQrCodeOptions()
-    {
-        @Nullable Object autoStartTokenDataUri = _map.get(AUTOSTART_TOKEN_DATA_URI);
-        @Nullable Object cspOverrideImgSrc = _map.get(CSP_OVERRIDE_IMG_SRC);
-        if (autoStartTokenDataUri instanceof String &&
-                cspOverrideImgSrc instanceof String)
-        {
-            return Optional.of(new QrCodeOptions((String) autoStartTokenDataUri, (String) cspOverrideImgSrc));
-        }
-        return Optional.empty();
-    }
-
     @Override
     public Map<String, Object> getViewData()
     {
         return _map;
-    }
-
-    public static final class QrCodeOptions
-    {
-        private final String _autoStartTokenDataUri;
-        private final String _cspOverrideImgSrc;
-
-        public QrCodeOptions(String autoStartTokenDataUri, String cspOverrideImgSrc)
-        {
-            _autoStartTokenDataUri = autoStartTokenDataUri;
-            _cspOverrideImgSrc = cspOverrideImgSrc;
-        }
-
-        public String getAutoStartTokenDataUri()
-        {
-            return _autoStartTokenDataUri;
-        }
-
-        public String getCspOverrideImgSrc()
-        {
-            return _cspOverrideImgSrc;
-        }
     }
 }

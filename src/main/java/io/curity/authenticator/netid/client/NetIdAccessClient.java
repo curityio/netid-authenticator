@@ -28,9 +28,11 @@ import io.curity.authenticator.netid.common.client.CollectStatus;
 import io.curity.authenticator.netid.common.client.PollingClient;
 import io.curity.authenticator.netid.common.client.PollingClientAuthenticateException;
 import io.curity.authenticator.netid.common.client.PollingClientCollectException;
+import io.curity.authenticator.netid.config.NetIdAccessConfig;
 import io.curity.authenticator.netid.injectors.NetIdAccessServerSoapFactory;
 import jakarta.xml.ws.soap.SOAPFaultException;
 import se.curity.identityserver.sdk.Nullable;
+import se.curity.identityserver.sdk.plugin.ManagedObject;
 import se.curity.identityserver.sdk.service.ExceptionFactory;
 
 import static com.google.common.base.Enums.getIfPresent;
@@ -38,16 +40,17 @@ import static io.curity.authenticator.netid.common.client.CollectFaultStatus.INT
 import static io.curity.authenticator.netid.common.utils.WebServiceUtils.callWebServiceWithRetry;
 import static se.curity.identityserver.sdk.errors.ErrorCode.EXTERNAL_SERVICE_ERROR;
 
-public class NetIdAccessClient implements PollingClient
+public class NetIdAccessClient extends ManagedObject<NetIdAccessConfig> implements PollingClient
 {
     private static final String SERVICE_NAME = "Net iD Access";
     private final NetiDAccessServerSoap _proxy;
     private final ExceptionFactory _exceptionFactory;
 
-    public NetIdAccessClient(ExceptionFactory exceptionFactory,
+    public NetIdAccessClient(NetIdAccessConfig configuration,
                              NetIdAccessServerSoapFactory proxyFactory)
     {
-        _exceptionFactory = exceptionFactory;
+        super(configuration);
+        _exceptionFactory = configuration.getExceptionFactory();
         _proxy = proxyFactory.create();
     }
 
