@@ -18,10 +18,10 @@ package io.curity.authenticator.netid.endpoints.authenticate;
 
 import com.google.common.collect.ImmutableMap;
 import io.curity.authenticator.netid.client.NetIdAccessClient;
-import io.curity.authenticator.netid.common.client.WebServicePoller;
-import io.curity.authenticator.netid.common.model.PollerPaths;
-import io.curity.authenticator.netid.common.model.WaitRequestModel;
-import io.curity.authenticator.netid.common.model.WaitResponseModel;
+import io.curity.authenticator.netid.client.WebServicePoller;
+import io.curity.authenticator.netid.model.PollerPaths;
+import io.curity.authenticator.netid.model.WaitRequestModel;
+import io.curity.authenticator.netid.model.WaitResponseModel;
 import io.curity.authenticator.netid.config.NetIdAccessConfig;
 import se.curity.identityserver.sdk.authentication.AuthenticatedState;
 import se.curity.identityserver.sdk.authentication.AuthenticationResult;
@@ -34,13 +34,13 @@ import se.curity.identityserver.sdk.web.ResponseModel;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.EndUserMessageKeys.START_APP;
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.CANCEL_URL;
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.FAILURE_URL;
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.POLL_URL;
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.RESTART_URL;
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.SERVICE_MESSAGE;
-import static io.curity.authenticator.netid.common.utils.SdkConstants.ACTION;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.START_APP;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.FormValueNames.CANCEL_URL;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.FormValueNames.FAILURE_URL;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.FormValueNames.POLL_URL;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.FormValueNames.RESTART_URL;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.FormValueNames.SERVICE_MESSAGE;
+import static io.curity.authenticator.netid.utils.SdkConstants.ACTION;
 import static io.curity.authenticator.netid.config.PluginComposer.getPollerPaths;
 import static io.curity.authenticator.netid.config.PluginComposer.getStatusCodeMapping;
 

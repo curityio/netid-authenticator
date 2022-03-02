@@ -17,9 +17,6 @@
 package io.curity.authenticator.netid.model;
 
 import com.google.common.collect.ImmutableMap;
-import io.curity.authenticator.netid.common.model.UserNameGetModel;
-import io.curity.authenticator.netid.common.model.UserNamePostModel;
-import io.curity.authenticator.netid.common.model.UserNameRequestModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.curity.identityserver.sdk.Nullable;

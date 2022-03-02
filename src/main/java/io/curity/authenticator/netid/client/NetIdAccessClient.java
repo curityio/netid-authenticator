@@ -20,14 +20,6 @@ package io.curity.authenticator.netid.client;
 import com.google.common.base.Strings;
 import com.secmaker.netid.nias.NetiDAccessServerSoap;
 import com.secmaker.netid.nias.ResultCollect;
-import io.curity.authenticator.netid.common.client.AuthenticateResponse;
-import io.curity.authenticator.netid.common.client.AuthenticationFaultStatus;
-import io.curity.authenticator.netid.common.client.CollectFaultStatus;
-import io.curity.authenticator.netid.common.client.CollectResponse;
-import io.curity.authenticator.netid.common.client.CollectStatus;
-import io.curity.authenticator.netid.common.client.PollingClient;
-import io.curity.authenticator.netid.common.client.PollingClientAuthenticateException;
-import io.curity.authenticator.netid.common.client.PollingClientCollectException;
 import io.curity.authenticator.netid.config.NetIdAccessConfig;
 import io.curity.authenticator.netid.injectors.NetIdAccessServerSoapFactory;
 import jakarta.xml.ws.soap.SOAPFaultException;
@@ -36,8 +28,8 @@ import se.curity.identityserver.sdk.plugin.ManagedObject;
 import se.curity.identityserver.sdk.service.ExceptionFactory;
 
 import static com.google.common.base.Enums.getIfPresent;
-import static io.curity.authenticator.netid.common.client.CollectFaultStatus.INTERNAL_ERROR;
-import static io.curity.authenticator.netid.common.utils.WebServiceUtils.callWebServiceWithRetry;
+import static io.curity.authenticator.netid.client.CollectFaultStatus.INTERNAL_ERROR;
+import static io.curity.authenticator.netid.utils.WebServiceUtils.callWebServiceWithRetry;
 import static se.curity.identityserver.sdk.errors.ErrorCode.EXTERNAL_SERVICE_ERROR;
 
 public class NetIdAccessClient extends ManagedObject<NetIdAccessConfig> implements PollingClient

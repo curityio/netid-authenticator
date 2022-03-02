@@ -18,7 +18,7 @@ package io.curity.authenticator.netid.endpoints.authenticate;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.html.HtmlEscapers;
-import io.curity.authenticator.netid.common.model.FailedRequestModel;
+import io.curity.authenticator.netid.model.FailedRequestModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.curity.identityserver.sdk.authentication.AuthenticationResult;
@@ -32,8 +32,8 @@ import se.curity.identityserver.sdk.web.Response;
 
 import java.util.Optional;
 
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.RESTART_URL;
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.FormValueNames.SERVICE_MESSAGE;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.FormValueNames.RESTART_URL;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.FormValueNames.SERVICE_MESSAGE;
 import static se.curity.identityserver.sdk.web.ResponseModel.mapResponseModel;
 import static se.curity.identityserver.sdk.web.ResponseModel.templateResponseModel;
 

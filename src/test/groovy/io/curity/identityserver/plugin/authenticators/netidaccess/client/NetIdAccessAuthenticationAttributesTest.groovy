@@ -20,8 +20,8 @@ import com.secmaker.netid.nias.DeviceInfoType
 import com.secmaker.netid.nias.ResultCollect
 import com.secmaker.netid.nias.UserInfoType
 import io.curity.authenticator.netid.client.NetIdAccessAuthenticationAttributes
-import io.curity.authenticator.netid.common.client.CollectResponse
-import io.curity.authenticator.netid.common.client.CollectStatus
+import io.curity.authenticator.netid.client.CollectResponse
+import io.curity.authenticator.netid.client.CollectStatus
 import se.curity.identityserver.sdk.attribute.AuthenticationAttributes
 import se.curity.identityserver.sdk.attribute.ContextAttributes
 import se.curity.identityserver.sdk.attribute.MapAttributeValue

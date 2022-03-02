@@ -1,12 +1,12 @@
 package io.curity.authenticator.netid.config;
 
-import io.curity.authenticator.netid.common.client.CustomPollerStatusCodes;
-import io.curity.authenticator.netid.common.client.SemanticHttpPollerStatusCodeMapping;
-import io.curity.authenticator.netid.common.client.WebServicePoller;
-import io.curity.authenticator.netid.common.model.PollerPaths;
+import io.curity.authenticator.netid.client.CustomPollerStatusCodes;
+import io.curity.authenticator.netid.client.SemanticHttpPollerStatusCodeMapping;
+import io.curity.authenticator.netid.client.WebServicePoller;
+import io.curity.authenticator.netid.model.PollerPaths;
 import se.curity.identityserver.sdk.web.Request;
 
-import static io.curity.authenticator.netid.common.utils.SdkConstants.AUTH_API_ACCEPT_TYPE;
+import static io.curity.authenticator.netid.utils.SdkConstants.AUTH_API_ACCEPT_TYPE;
 
 public class PluginComposer
 {

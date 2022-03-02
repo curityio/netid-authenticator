@@ -19,7 +19,6 @@ package io.curity.authenticator.netid.client;
 import com.secmaker.netid.nias.DeviceInfoType;
 import com.secmaker.netid.nias.ResultCollect;
 import com.secmaker.netid.nias.UserInfoType;
-import io.curity.authenticator.netid.common.client.CollectStatus;
 import se.curity.identityserver.sdk.Nullable;
 import se.curity.identityserver.sdk.attribute.Attribute;
 import se.curity.identityserver.sdk.attribute.AttributeName;
@@ -37,8 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.curity.authenticator.netid.common.utils.NullUtils.ifNotNull;
-import static io.curity.authenticator.netid.common.utils.NullUtils.valueOrError;
+import static io.curity.authenticator.netid.utils.NullUtils.ifNotNull;
+import static io.curity.authenticator.netid.utils.NullUtils.valueOrError;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static se.curity.identityserver.sdk.attribute.AccountAttributes.NAME;
 import static se.curity.identityserver.sdk.attribute.AccountAttributes.X509_CERTIFICATES;

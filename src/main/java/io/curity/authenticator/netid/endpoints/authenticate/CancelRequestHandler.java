@@ -16,7 +16,7 @@
 
 package io.curity.authenticator.netid.endpoints.authenticate;
 
-import io.curity.authenticator.netid.common.logic.ErrorReportingStrategy;
+import io.curity.authenticator.netid.ErrorReportingStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.curity.identityserver.sdk.authentication.AuthenticationResult;

@@ -30,10 +30,10 @@ import se.curity.identityserver.sdk.plugin.descriptor.AuthenticatorPluginDescrip
 
 import java.util.Optional;
 
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.Endpoints.CANCEL;
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.Endpoints.FAILED;
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.Endpoints.LAUNCH;
-import static io.curity.authenticator.netid.common.PollingAuthenticatorConstants.Endpoints.WAIT;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.Endpoints.CANCEL;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.Endpoints.FAILED;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.Endpoints.LAUNCH;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.Endpoints.WAIT;
 
 public final class NetIdAccessAuthenticatorPluginDescriptor
         implements AuthenticatorPluginDescriptor<NetIdAccessConfig>
