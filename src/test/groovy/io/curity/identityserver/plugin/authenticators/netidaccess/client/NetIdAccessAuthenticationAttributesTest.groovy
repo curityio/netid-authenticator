@@ -29,6 +29,7 @@ import se.curity.identityserver.sdk.attribute.SubjectAttributes
 import spock.lang.Specification
 
 class NetIdAccessAuthenticationAttributesTest extends Specification {
+
     def "Authentication attributes can be created from netid response"() {
         given: "A result object from netid"
         ResultCollect collected = createResult()
