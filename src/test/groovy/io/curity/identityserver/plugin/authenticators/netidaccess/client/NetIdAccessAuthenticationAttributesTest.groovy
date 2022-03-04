@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package groovy.io.curity.identityserver.plugin.authenticators.netidaccess.client
+package io.curity.identityserver.plugin.authenticators.netidaccess.client
 
 import com.secmaker.netid.nias.DeviceInfoType
 import com.secmaker.netid.nias.ResultCollect
