@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package groovy.io.curity.identityserver.plugin.authenticators.netidaccess.client
+package io.curity.identityserver.plugin.authenticators.netidaccess.client
 
 import com.secmaker.netid.nias.DeviceInfoType
 import com.secmaker.netid.nias.ResultCollect
@@ -29,6 +29,7 @@ import se.curity.identityserver.sdk.attribute.SubjectAttributes
 import spock.lang.Specification
 
 class NetIdAccessAuthenticationAttributesTest extends Specification {
+
     def "Authentication attributes can be created from netid response"() {
         given: "A result object from netid"
         ResultCollect collected = createResult()

@@ -39,6 +39,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static io.curity.authenticator.netid.utils.ClassLoaderContextUtils.withPluginClassLoader;
+
 public final class NetIdAccessServerSoapFactory
 {
     private static final Logger _logger = LoggerFactory.getLogger(NetIdAccessServerSoapFactory.class);
@@ -61,12 +63,12 @@ public final class NetIdAccessServerSoapFactory
     {
         var httpClient = _config.getHttpClient();
 
-        NetiDAccessServer accessServer = new NetiDAccessServer();
-        NetiDAccessServerSoap proxy = accessServer.getNetiDAccessServerSoap();
-
-        configureWebserviceClient((BindingProvider) proxy, buildEndpointAddress(httpClient.getScheme()));
-
-        return proxy;
+        return withPluginClassLoader(() -> {
+            NetiDAccessServer accessServer = new NetiDAccessServer();
+            NetiDAccessServerSoap proxy = accessServer.getNetiDAccessServerSoap();
+            configureWebserviceClient((BindingProvider) proxy, buildEndpointAddress(httpClient.getScheme()));
+            return proxy;
+        });
     }
 
     private static void configureWebserviceClient(BindingProvider bindingProvider,
@@ -91,22 +93,24 @@ public final class NetIdAccessServerSoapFactory
                 @Override
                 public boolean handleMessage(SOAPMessageContext context)
                 {
-                    SOAPMessage soapMessage = context.getMessage();
+                    return withPluginClassLoader(() -> {
+                        SOAPMessage soapMessage = context.getMessage();
 
-                    try
-                    {
-                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                        try
+                        {
+                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-                        soapMessage.writeTo(outputStream);
+                            soapMessage.writeTo(outputStream);
 
-                        _logger.trace(outputStream.toString(StandardCharsets.UTF_8));
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.debug("Could not log SOAP message", ex);
-                    }
+                            _logger.trace(outputStream.toString(StandardCharsets.UTF_8));
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.debug("Could not log SOAP message", ex);
+                        }
 
-                    return true;
+                        return true;
+                    });
                 }
 
                 @Override
