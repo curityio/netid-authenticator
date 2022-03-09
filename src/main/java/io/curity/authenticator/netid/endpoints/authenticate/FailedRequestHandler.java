@@ -18,6 +18,7 @@ package io.curity.authenticator.netid.endpoints.authenticate;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.html.HtmlEscapers;
+import io.curity.authenticator.netid.config.NetIdAccessConfig;
 import io.curity.authenticator.netid.model.FailedRequestModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,15 +46,13 @@ public final class FailedRequestHandler implements AuthenticatorRequestHandler<F
     private final ExceptionFactory _exceptionFactory;
     private final SessionManager _sessionManager;
 
-    public FailedRequestHandler(ExceptionFactory exceptionFactory,
-                                SessionManager sessionManager,
-                                AuthenticatorInformationProvider informationProvider)
+    public FailedRequestHandler(ExceptionFactory exceptionFactory, NetIdAccessConfig configuration)
     {
         _logger.trace("FailedRequestHandler constructor");
 
         _exceptionFactory = exceptionFactory;
-        _sessionManager = sessionManager;
-        _informationProvider = informationProvider;
+        _sessionManager = configuration.getSessionManager();
+        _informationProvider = configuration.getAuthenticatorInformationProvider();
     }
 
     @Override

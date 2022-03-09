@@ -17,28 +17,34 @@
 package io.curity.authenticator.netid.endpoints.authenticate;
 
 import io.curity.authenticator.netid.ErrorReportingStrategy;
+import io.curity.authenticator.netid.config.NetIdAccessConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.curity.identityserver.sdk.authentication.AuthenticationResult;
 import se.curity.identityserver.sdk.authentication.AuthenticatorRequestHandler;
 import se.curity.identityserver.sdk.service.ExceptionFactory;
+import se.curity.identityserver.sdk.service.SessionManager;
+import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformationProvider;
 import se.curity.identityserver.sdk.web.Request;
 import se.curity.identityserver.sdk.web.Response;
 
 import java.util.Optional;
+
+import static io.curity.authenticator.netid.config.PluginComposer.getPollerPaths;
 
 public final class CancelRequestHandler implements AuthenticatorRequestHandler<Request>
 {
     private static final Logger _logger = LoggerFactory.getLogger(CancelRequestHandler.class);
 
     private final ExceptionFactory _exceptionFactory;
-    private final ErrorReportingStrategy _errorReportingStrategy;
+    private final SessionManager _sessionManager;
+    private final AuthenticatorInformationProvider _informationProvider;
 
-    public CancelRequestHandler(ExceptionFactory exceptionFactory,
-                                ErrorReportingStrategy errorReportingStrategy)
+    public CancelRequestHandler(ExceptionFactory exceptionFactory, NetIdAccessConfig configuration)
     {
         _exceptionFactory = exceptionFactory;
-        _errorReportingStrategy = errorReportingStrategy;
+        _sessionManager = configuration.getSessionManager();
+        _informationProvider = configuration.getAuthenticatorInformationProvider();
     }
 
     @Override
@@ -56,7 +62,15 @@ public final class CancelRequestHandler implements AuthenticatorRequestHandler<R
         _logger.debug("Reporting to the user that the transaction is cancelled, but no action is being taken as NetID" +
                 " does not provide an explicit way to cancel a transaction, it will time out after a short time");
 
-        throw _errorReportingStrategy.getUserCancellationException("error.user-cancelled");
+        var pollerPaths = getPollerPaths(request);
+        var errorReportingStrategy = new ErrorReportingStrategy(
+                _informationProvider,
+                _sessionManager,
+                _exceptionFactory,
+                pollerPaths
+        );
+
+        throw errorReportingStrategy.getUserCancellationException("error.user-cancelled");
     }
 
     @Override

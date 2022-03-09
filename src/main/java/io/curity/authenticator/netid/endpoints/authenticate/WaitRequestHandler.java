@@ -19,6 +19,7 @@ package io.curity.authenticator.netid.endpoints.authenticate;
 import com.google.common.collect.ImmutableMap;
 import io.curity.authenticator.netid.client.NetIdAccessClient;
 import io.curity.authenticator.netid.client.WebServicePoller;
+import io.curity.authenticator.netid.injectors.NetIdAccessServerSoapFactory;
 import io.curity.authenticator.netid.model.PollerPaths;
 import io.curity.authenticator.netid.model.WaitRequestModel;
 import io.curity.authenticator.netid.model.WaitResponseModel;
@@ -52,11 +53,11 @@ public final class WaitRequestHandler implements AuthenticatorRequestHandler<Wai
     private WebServicePoller _webservicePoller;
     private PollerPaths _pollerPaths;
 
-    public WaitRequestHandler(NetIdAccessConfig configuration, AuthenticatedState authenticatedState, NetIdAccessClient client)
+    public WaitRequestHandler(NetIdAccessConfig configuration, AuthenticatedState authenticatedState)
     {
         _config = configuration;
         _authenticatedState = authenticatedState;
-        _netIdAccessClient = client;
+        _netIdAccessClient = new NetIdAccessClient(configuration, new NetIdAccessServerSoapFactory(configuration));
     }
 
     @Override

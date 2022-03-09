@@ -62,13 +62,4 @@ public final class NetIdAccessAuthenticatorPluginDescriptor
         // For now it's different so that both plugins can be used in CIS for testing.
         return "netidaccess-os";
     }
-
-    // TODO the client can be managed object, but I have to figure out the Provider implementation problem first.
-    // It's easier to debug when the client is not a managed object.
-
-    //    @Override
-//    public Optional<NetIdAccessClient> createManagedObject(NetIdAccessConfig configuration)
-//    {
-//        return Optional.of(new NetIdAccessClient(configuration, new NetIdAccessServerSoapFactory(configuration)));
-//    }
 }
