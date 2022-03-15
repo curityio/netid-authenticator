@@ -29,6 +29,7 @@ import se.curity.identityserver.sdk.service.ExceptionFactory;
 
 import static com.google.common.base.Enums.getIfPresent;
 import static io.curity.authenticator.netid.client.CollectFaultStatus.INTERNAL_ERROR;
+import static io.curity.authenticator.netid.utils.ClassLoaderContextUtils.withPluginClassLoader;
 import static io.curity.authenticator.netid.utils.WebServiceUtils.callWebServiceWithRetry;
 import static se.curity.identityserver.sdk.errors.ErrorCode.EXTERNAL_SERVICE_ERROR;
 
@@ -53,7 +54,7 @@ public class NetIdAccessClient extends ManagedObject<NetIdAccessConfig> implemen
         try
         {
             response = callWebServiceWithRetry(
-                    () -> _proxy.collect(transactionId),
+                    () -> withPluginClassLoader(() -> _proxy.collect(transactionId)),
                     () -> _exceptionFactory.
                             internalServerException(EXTERNAL_SERVICE_ERROR, "Failed to poll for status")).join();
         }
@@ -94,7 +95,7 @@ public class NetIdAccessClient extends ManagedObject<NetIdAccessConfig> implemen
         {
             String finalUserName = Strings.nullToEmpty(userName);
             String transactionId = callWebServiceWithRetry(
-                    () -> _proxy.authenticate(finalUserName, null, null),
+                    () -> withPluginClassLoader(() -> _proxy.authenticate(finalUserName, null, null)),
                     () -> _exceptionFactory.
                             internalServerException(EXTERNAL_SERVICE_ERROR, "Failed to start authentication")).join();
             return new AuthenticateResponse.Builder(transactionId, useSameDevice ? transactionId : "").build();

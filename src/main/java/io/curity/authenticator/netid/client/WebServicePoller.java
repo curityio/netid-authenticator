@@ -26,6 +26,8 @@ import se.curity.identityserver.sdk.attribute.Attribute;
 import se.curity.identityserver.sdk.attribute.AttributeName;
 import se.curity.identityserver.sdk.attribute.AttributeValue;
 import se.curity.identityserver.sdk.attribute.AuthenticationAttributes;
+import se.curity.identityserver.sdk.attribute.ContextAttributes;
+import se.curity.identityserver.sdk.attribute.SubjectAttributes;
 import se.curity.identityserver.sdk.authentication.AuthenticatedState;
 import se.curity.identityserver.sdk.authentication.AuthenticationResult;
 import se.curity.identityserver.sdk.errors.ErrorCode;
@@ -36,6 +38,7 @@ import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformat
 import se.curity.identityserver.sdk.web.Response;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.Optional;
 
 import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.GENERAL_ERROR;
@@ -210,9 +213,14 @@ public class WebServicePoller
 
             if (sessionAttributes != null)
             {
+                var sessionAttributesMap = sessionAttributes.getValueOfType(Map.class);
+                var authenticationAttributes =  AuthenticationAttributes.of(
+                        SubjectAttributes.of((Map<?, ?>) sessionAttributesMap.get("subject")),
+                        ContextAttributes.of((Map<?, ?>) sessionAttributesMap.get("context"))
+                );
                 var subject = sessionSubject != null ? sessionSubject.getOptionalValueOfType(String.class) : null;
                 return getAuthenticationResultWhenSuccess(_authenticatedState,
-                        sessionAttributes.getOptionalValueOfType(AuthenticationAttributes.class),
+                        authenticationAttributes,
                         subject);
             }
             else
