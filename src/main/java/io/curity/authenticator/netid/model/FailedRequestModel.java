@@ -101,9 +101,7 @@ public final class FailedRequestModel
         {
             @Nullable String errorMessage = _incomingErrorMessage.equals(UNKNOWN_ERROR) ? _errorMessage : _incomingErrorMessage;
 
-            assert !"[object Object]".equals(errorMessage);
-
-            return errorMessage == null ? UNKNOWN_ERROR : errorMessage;
+            return errorMessage == null || "[object Object]".equals(errorMessage) ? UNKNOWN_ERROR : errorMessage;
         }
     }
 }

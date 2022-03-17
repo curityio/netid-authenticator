@@ -39,7 +39,12 @@ public class WebServiceUtils
                                                                     int retries,
                                                                     Supplier<? extends RuntimeException> throwOnError)
     {
-        return CompletableFuture.supplyAsync(webServiceCall).exceptionallyCompose(ex -> {
+        try
+        {
+            return CompletableFuture.supplyAsync(webServiceCall);
+        }
+        catch (RuntimeException ex)
+        {
             Throwable cause = Throwables.getRootCause(ex);
             String errorMessage;
             if (cause.getMessage() != null)
@@ -65,6 +70,6 @@ public class WebServiceUtils
             RuntimeException runtimeException = throwOnError.get();
             runtimeException.initCause(ex);
             throw runtimeException;
-        });
+        }
     }
 }
