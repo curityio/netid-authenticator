@@ -35,38 +35,36 @@
  * http://velocity.apache.org/engine/devel/user-guide.html.
  *#
 
-#set ($page_symbol = "/assets/images/login-symbol.netid.svg")
+#set ($page_symbol = "/assets/images/login-symbol-netid.svg")
 
 #define($_body)
-    #set($keyPrefix = "authenticator.netidaccess.service")
+<p class="h4 mb4 semibold center" id="poll_message">#message("${_templatePrefix}.view.title")</p>
 
-<div class="area center">
-    <h1>#message("${keyPrefix}.${_serviceMessage}")</h1>
-    <p id="poll_message">#message("${keyPrefix}.${_serviceMessage}")</p>
+<iframe id="autoStart" height="0" width="0" frameborder="0"></iframe>
 
-    <div class="center p2">
+<div class="px4 mb4">
+    <div class="loader center">
         #parse("fragments/spinner")
     </div>
 </div>
 
-    #parse("fragments/generic-poller")
-<script type="text/javascript" $!nonceAttr>
-    jQuery(document).ready(function () {
-        document.forms["cancel"].onsubmit =se.curity.authenticator.polling.start();
-
-        // Wait 10 seconds, then show cancel
-        setTimeout(function () {
-            jQuery(".manuallink").removeClass("display-none");
-        }, 10000);
-    });
-</script>
+<form class="manuallink pb0 display-none">
+    <p class="h4 center">#message("${_templatePrefix}.view.manualstart")</p>
+    <a class="button button-fullwidth button-primary center" id="manualStart" type="submit">
+        #message("${_templatePrefix}.view.button.manualstart")</a>
+</form>
 <form name="cancel" action="cancel" class="manuallink display-none" method="get">
     <button type="submit" class="button button-fullwidth button-danger-outline">#message($_messages,
         "${_templatePrefix}.view.button.cancel")</button>
 </form>
-<form action="$_action" method="post" class="display-none" id="pollingDone">
+<form action="$_action" method="post" id="pollingDone" class="display-none">
     <input type="hidden" name="_pollingDone" value="true"/>
 </form>
+
+#set($keyPrefix = "authenticator.netidaccess.service")
+#parse("fragments/generic-poller")
+#parse("authenticator/netidaccess/launch/handle-auto-start-uri")
+#parse("fragments/authentication-app-launcher")
 
 #end
 

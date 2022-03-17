@@ -35,7 +35,7 @@
  * http://velocity.apache.org/engine/devel/user-guide.html.
  *#
 
-#set ($page_symbol = "/assets/images/login-symbol.netid.svg")
+#set ($page_symbol = "/assets/images/login-symbol-netid.svg")
 
 #define($_body)
 #set($keyPrefix = "authenticator.netidaccess.service")

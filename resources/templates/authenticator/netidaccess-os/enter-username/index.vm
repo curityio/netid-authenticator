@@ -42,7 +42,7 @@
     #set ($_username = $_postBack.get("username"))
 #end
 
-#set ($page_symbol = "/assets/images/login-symbol.netid.svg")
+#set ($page_symbol = "/assets/images/login-symbol-netid.svg")
 
 #define($_body)
 <div id="device-chooser" class="login-chooser mb2 clearfix login-form">
