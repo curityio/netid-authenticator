@@ -19,6 +19,8 @@ package io.curity.authenticator.netid.model;
 import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import se.curity.identityserver.sdk.Nullable;
 import se.curity.identityserver.sdk.authentication.AuthenticatedState;
 import se.curity.identityserver.sdk.service.UserPreferenceManager;
@@ -70,7 +72,8 @@ public final class NonValidatingUserNameRequestModel extends UserNameRequestMode
 
         private final boolean _useSameDevice;
 
-        private static final Logger _maskedLogger = LoggerFactory.getLogger(NonValidatingUserNamePostModel.class);
+        private static final Logger _logger = LoggerFactory.getLogger(NonValidatingUserNamePostModel.class);
+        private static final Marker MASK_MARKER = MarkerFactory.getMarker("MASK");
 
         NonValidatingUserNamePostModel(Request request,
                                        UserPreferenceManager userPreferenceManager)
@@ -89,7 +92,7 @@ public final class NonValidatingUserNameRequestModel extends UserNameRequestMode
 
             if (isNotEmpty(_userName))
             {
-                _maskedLogger.debug("Found username {}", _userName);
+                _logger.debug(MASK_MARKER, "Found username {}", _userName);
             }
 
             @Nullable String useSameDevice = request.getFormParameterValueOrError(USE_SAME_DEVICE_PARAM);

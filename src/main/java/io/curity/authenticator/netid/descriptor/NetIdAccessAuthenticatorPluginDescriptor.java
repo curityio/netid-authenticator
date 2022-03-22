@@ -58,8 +58,6 @@ public final class NetIdAccessAuthenticatorPluginDescriptor
     @Override
     public String getPluginImplementationType()
     {
-        // TODO - this should be "netidaccess" before publishing the plugin.
-        // For now it's different so that both plugins can be used in CIS for testing.
         return "netidaccess-os";
     }
 }

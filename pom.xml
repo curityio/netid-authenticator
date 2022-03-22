@@ -82,7 +82,7 @@
                         </goals>
                         <configuration>
                             <includeScope>runtime</includeScope>
-                            <outputDirectory>target</outputDirectory>
+                            <outputDirectory>target/usr/share/plugins/authenticators.netidos</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -112,6 +112,14 @@
                     </includes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <outputDirectory>target/usr/share/plugins/authenticators.netidos</outputDirectory>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -125,7 +133,7 @@
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>6.2.0.CR1</version>
+            <version>${project.hibernateValidatorVersion}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

@@ -14,7 +14,7 @@ Build the plugin by issuing the command `mvn package`. This will produce a JAR f
 
 To install the plugin, copy the following files on each node, including the admin node:
 
-- the compiled JAR and all of its dependencies into the `${IDSVR_HOME}/usr/share/plugins/${pluginGroup}`,
+- the contents of `/target/usr/` to `${IDSVR_HOME}/usr/`,
 - the contents of the `/resources/templates` directory to `${IDSVR_HOME}/usr/share/templates/overrides`,
 - the contents of the `/resources/messages` directory to `${IDSVR_HOME}/usr/share/messages/overrides`,
 - the `resources/images/login-symbol-netid.svg` file to `${IDSVR_HOME}/usr/share/webroot/assets/images`.

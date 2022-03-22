@@ -22,6 +22,8 @@ import io.curity.authenticator.netid.model.PollerPaths;
 import io.curity.authenticator.netid.model.PollingResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import se.curity.identityserver.sdk.attribute.Attribute;
 import se.curity.identityserver.sdk.attribute.AttributeName;
 import se.curity.identityserver.sdk.attribute.AttributeValue;
@@ -55,6 +57,7 @@ public class WebServicePoller
 {
 
     private static final Logger _logger = LoggerFactory.getLogger(WebServicePoller.class);
+    private static final Marker MASK_MARKER = MarkerFactory.getMarker("MASK");
 
     private final PollingClient _pollingClient;
     private final PollerPaths _pollerPaths;
@@ -274,9 +277,10 @@ public class WebServicePoller
                 if (authenticatedState.isAuthenticated() && !authenticatedState.getUsername().equals(subject))
                 {
                     _logger.debug(
+                            MASK_MARKER,
                             "Net ID authenticated subject '{}' does not match authenticated state subject '{}'",
-                            subject.charAt(0) + "...",
-                            authenticatedState.getUsername().charAt(0) + "..."
+                            subject,
+                            authenticatedState.getUsername()
                     );
                 }
             }
@@ -290,7 +294,7 @@ public class WebServicePoller
 
         if (_logger.isDebugEnabled())
         {
-            _logger.debug("User {} authenticated", subject);
+            _logger.debug(MASK_MARKER, "User {} authenticated", subject);
         }
 
         return new AuthenticationResult(authenticationAttributes);
