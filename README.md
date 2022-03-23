@@ -7,17 +7,19 @@ A NetID Access Authenticator Plugin for the Curity Identity Server.
 
 ## Building the Plugin
 
-
 Build the plugin by issuing the command `mvn package`. This will produce a JAR file in the `target` directory, which can be installed.
 
 ## Installing the Plugin
 
-To install the plugin, copy the following files on each node, including the admin node:
+### Installing from Release Package
 
-- the contents of `/target/usr/` to `${IDSVR_HOME}/usr/`,
-- the contents of the `/resources/templates` directory to `${IDSVR_HOME}/usr/share/templates/overrides`,
-- the contents of the `/resources/messages` directory to `${IDSVR_HOME}/usr/share/messages/overrides`,
-- the `resources/images/login-symbol-netid.svg` file to `${IDSVR_HOME}/usr/share/webroot/assets/images`.
+To install the plugin, download the release zip archive, unpack it and copy the contents of the `/usr/` to `${IDSVR_HOME}/usr/`, 
+on each node of the Curity Identity Server, including the admin node.
+
+### Installing from Source
+
+To install the plugin after building, copy the contents of `/target/usr/` to `${IDSVR_HOME}/usr/`, on each node of
+the Curity Identity Server, including the admin node.
 
 For more information about installing plugins, refer to the [curity.io/plugins](https://support.curity.io/docs/latest/developer-guide/plugins/index.html#plugin-installation).
 
