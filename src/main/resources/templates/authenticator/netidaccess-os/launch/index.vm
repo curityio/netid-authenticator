@@ -63,7 +63,7 @@
 
 #set($keyPrefix = "authenticator.netidaccess.service")
 #parse("fragments/generic-poller")
-#parse("authenticator/netidaccess/launch/handle-auto-start-uri")
+#parse("authenticator/netidaccess-os/launch/handle-auto-start-uri")
 #parse("fragments/authentication-app-launcher")
 
 #end
