@@ -6,7 +6,7 @@
 
     <groupId>io.curity.identityserver.plugin</groupId>
     <artifactId>identityserver.plugins.authenticators.netidaccess-os</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>Curity NetID Access Authenticator</name>
@@ -82,7 +82,7 @@
                         </goals>
                         <configuration>
                             <includeScope>runtime</includeScope>
-                            <outputDirectory>target/usr/share/plugins/authenticators.netidos</outputDirectory>
+                            <outputDirectory>target/usr/share/plugins/authenticators.netidaccess-os</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -117,7 +117,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.2</version>
                 <configuration>
-                    <outputDirectory>target/usr/share/plugins/authenticators.netidos</outputDirectory>
+                    <outputDirectory>target/usr/share/plugins/authenticators.netidaccess-os</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>

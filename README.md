@@ -5,6 +5,8 @@
 
 A NetID Access Authenticator Plugin for the Curity Identity Server.
 
+**Note**: The plugin requires at least version 7.0. of the Curity Identity Server. It might not work with previous versions.
+
 ## Building the Plugin
 
 Build the plugin by issuing the command `mvn package`. This will produce a JAR file in the `target` directory, which can be installed.
