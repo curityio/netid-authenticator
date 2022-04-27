@@ -11,6 +11,8 @@ A NetID Access Authenticator Plugin for the Curity Identity Server.
 
 Build the plugin by issuing the command `mvn package`. This will produce a JAR file in the `target` directory, which can be installed.
 
+Note that to build the plugin manually you will need access to Secmaker's wsdl under `https://showroom.secmaker.com/nias/ServiceServer.asmx?WSDL`.
+
 ## Installing the Plugin
 
 ### Installing from Release Package

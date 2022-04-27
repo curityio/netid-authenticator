@@ -17,14 +17,12 @@
 package io.curity.authenticator.netid.descriptor;
 
 import com.google.common.collect.ImmutableMap;
-import io.curity.authenticator.netid.client.NetIdAccessClient;
 import io.curity.authenticator.netid.config.NetIdAccessConfig;
 import io.curity.authenticator.netid.endpoints.authenticate.CancelRequestHandler;
 import io.curity.authenticator.netid.endpoints.authenticate.EnterUserNameRequestHandler;
 import io.curity.authenticator.netid.endpoints.authenticate.FailedRequestHandler;
 import io.curity.authenticator.netid.endpoints.authenticate.LaunchRequestHandler;
 import io.curity.authenticator.netid.endpoints.authenticate.WaitRequestHandler;
-import io.curity.authenticator.netid.injectors.NetIdAccessServerSoapFactory;
 import se.curity.identityserver.sdk.authentication.AuthenticatorRequestHandler;
 import se.curity.identityserver.sdk.plugin.descriptor.AuthenticatorPluginDescriptor;
 

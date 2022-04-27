@@ -29,8 +29,8 @@ import se.curity.identityserver.sdk.service.ExceptionFactory;
 
 import static com.google.common.base.Enums.getIfPresent;
 import static io.curity.authenticator.netid.client.CollectFaultStatus.INTERNAL_ERROR;
-import static io.curity.authenticator.netid.utils.ClassLoaderContextUtils.withPluginClassLoader;
 import static io.curity.authenticator.netid.utils.WebServiceUtils.callWebServiceWithRetry;
+import static se.curity.identityserver.sdk.ClassLoaderContextUtils.withPluginClassLoader;
 import static se.curity.identityserver.sdk.errors.ErrorCode.EXTERNAL_SERVICE_ERROR;
 
 public class NetIdAccessClient extends ManagedObject<NetIdAccessConfig> implements PollingClient

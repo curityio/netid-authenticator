@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static io.curity.authenticator.netid.utils.ClassLoaderContextUtils.withPluginClassLoader;
+import static se.curity.identityserver.sdk.ClassLoaderContextUtils.withPluginClassLoader;
 
 public final class NetIdAccessServerSoapFactory
 {
