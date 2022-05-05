@@ -20,9 +20,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.curityVersion>6.8.0</project.curityVersion>
-        <project.hibernateValidatorVersion>6.2.0.CR1</project.hibernateValidatorVersion>
-        <project.slf4jVersion>1.7.30</project.slf4jVersion>
+        <project.curityVersion>7.0.1</project.curityVersion>
+        <project.hibernateValidatorVersion>7.0.3.Final</project.hibernateValidatorVersion>
+        <project.slf4jVersion>1.7.36</project.slf4jVersion>
     </properties>
 
     <build>

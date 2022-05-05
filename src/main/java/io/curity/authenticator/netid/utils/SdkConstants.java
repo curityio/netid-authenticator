@@ -20,6 +20,5 @@ public class SdkConstants
 {
     public static final String ACTION = "_action";
     public static final String CSP_OVERRIDE_CHILD_SRC = "_cspChildSrc";
-    public static final String CSP_OVERRIDE_IMG_SRC = "_cspImgsrc";
     public static final String AUTH_API_ACCEPT_TYPE = "application/vnd.auth+json";
 }
