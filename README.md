@@ -29,6 +29,44 @@ For more information about installing plugins, refer to the [curity.io/plugins](
 
 For a list of the dependencies and their versions, run `mvn dependency:list`. Ensure that all of these are installed in the plugin group; otherwise, they will not be accessible to this plug-in and run-time errors will result.
 
+## Migrating from internal plugin
+
+If you are already running the internal Curity authenticator that was available in versions before 7.0, the configuration will need tbe changed slightly
+### Plugin type
+The type of the plugin changed from `netidaccess` to `netidaccess-os`. This affects an xml-tag and a namespace. 
+Internal plugin config:
+```
+<authenticator>
+    <id>NetIdAccess</id>
+    <netidaccess xmlns="https://curity.se/ns/conf/authenticator/netid-access">
+    …
+    </netidaccess>
+</authenticator>
+```
+
+Migrated config:
+```
+<authenticator>
+    <id>NetIdAccess</id>
+    <netidaccess-os xmlns="https://curity.se/ns/ext-conf/netidaccess-os">
+    …
+    </netidaccess>
+</authenticator>
+```
+
+### HTTP Client
+The reference to a http-client now needs an `<id>` element.
+```
+<http-client>trustStoreHttpClient</http-client>
+```
+
+Migrated config:
+```
+<http-client>
+    <id>trustStoreHttpClient</id>
+</http-client>
+```
+
 ## More Information
 
 Please visit [curity.io](https://curity.io/) for more information about the Curity Identity Server.
