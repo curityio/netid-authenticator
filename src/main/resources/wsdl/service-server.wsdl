@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://netid.secmaker.com/nias/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://netid.secmaker.com/nias/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://netid.secmaker.com/nias/">
+      <s:element name="Register">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="serverId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="image" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="format" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RegisterResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegisterResult" type="tns:ResultRegister" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ResultRegister">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="scheme" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="provider" type="tns:ServiceInfoType" />
+          <s:element minOccurs="0" maxOccurs="1" name="caller" type="tns:ServiceInfoType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ServiceInfoType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="version" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="image" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="id" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Authenticate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="personalNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userNonVisibleData" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="endUserInfo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AuthenticateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AuthenticateResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Sign">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="personalNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userVisibleData" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userNonVisibleData" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="endUserInfo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SignResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SignResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Collect">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="orderRef" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CollectResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CollectResult" type="tns:ResultCollect" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ResultCollect">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="progressStatus" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="signature" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="userInfo" type="tns:UserInfoType" />
+          <s:element minOccurs="0" maxOccurs="1" name="ocspResponse" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nivResponse" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="deviceInfo" type="tns:DeviceInfoType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="UserInfoType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="personalNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="notBefore" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="notAfter" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="givenName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="surname" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="certificate" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DeviceInfoType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="version" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="address" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="RegisterSoapIn">
+    <wsdl:part name="parameters" element="tns:Register" />
+  </wsdl:message>
+  <wsdl:message name="RegisterSoapOut">
+    <wsdl:part name="parameters" element="tns:RegisterResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateSoapIn">
+    <wsdl:part name="parameters" element="tns:Authenticate" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateSoapOut">
+    <wsdl:part name="parameters" element="tns:AuthenticateResponse" />
+  </wsdl:message>
+  <wsdl:message name="SignSoapIn">
+    <wsdl:part name="parameters" element="tns:Sign" />
+  </wsdl:message>
+  <wsdl:message name="SignSoapOut">
+    <wsdl:part name="parameters" element="tns:SignResponse" />
+  </wsdl:message>
+  <wsdl:message name="CollectSoapIn">
+    <wsdl:part name="parameters" element="tns:Collect" />
+  </wsdl:message>
+  <wsdl:message name="CollectSoapOut">
+    <wsdl:part name="parameters" element="tns:CollectResponse" />
+  </wsdl:message>
+  <wsdl:portType name="NetiDAccessServerSoap">
+    <wsdl:operation name="Register">
+      <wsdl:input message="tns:RegisterSoapIn" />
+      <wsdl:output message="tns:RegisterSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <wsdl:input message="tns:AuthenticateSoapIn" />
+      <wsdl:output message="tns:AuthenticateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Sign">
+      <wsdl:input message="tns:SignSoapIn" />
+      <wsdl:output message="tns:SignSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Collect">
+      <wsdl:input message="tns:CollectSoapIn" />
+      <wsdl:output message="tns:CollectSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetiDAccessServerSoap" type="tns:NetiDAccessServerSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Register">
+      <soap:operation soapAction="http://netid.secmaker.com/nias/Register" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <soap:operation soapAction="http://netid.secmaker.com/nias/Authenticate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Sign">
+      <soap:operation soapAction="http://netid.secmaker.com/nias/Sign" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Collect">
+      <soap:operation soapAction="http://netid.secmaker.com/nias/Collect" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="NetiDAccessServerSoap12" type="tns:NetiDAccessServerSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Register">
+      <soap12:operation soapAction="http://netid.secmaker.com/nias/Register" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <soap12:operation soapAction="http://netid.secmaker.com/nias/Authenticate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Sign">
+      <soap12:operation soapAction="http://netid.secmaker.com/nias/Sign" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Collect">
+      <soap12:operation soapAction="http://netid.secmaker.com/nias/Collect" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="NetiDAccessServer">
+    <wsdl:port name="NetiDAccessServerSoap" binding="tns:NetiDAccessServerSoap">
+      <soap:address location="https://showroom.lab.secmaker.com/nias/ServiceServer.asmx" />
+    </wsdl:port>
+    <wsdl:port name="NetiDAccessServerSoap12" binding="tns:NetiDAccessServerSoap12">
+      <soap12:address location="https://showroom.lab.secmaker.com/nias/ServiceServer.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
