@@ -31,8 +31,10 @@ For a list of the dependencies and their versions, run `mvn dependency:list`. En
 
 ## Migrating from internal plugin
 
-If you are already running the internal Curity authenticator that was available in versions before 7.0, the configuration will need tbe changed slightly
+If you are already running the internal Curity authenticator that was available in versions before 7.0, the configuration will need to be changed slightly.
+
 ### Plugin type
+
 The type of the plugin changed from `netidaccess` to `netidaccess-os`. This affects an xml-tag and a namespace. 
 Internal plugin config:
 ```
@@ -55,6 +57,7 @@ Migrated config:
 ```
 
 ### HTTP Client
+
 The reference to a http-client now needs an `<id>` element.
 ```
 <http-client>trustStoreHttpClient</http-client>
