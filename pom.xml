@@ -6,7 +6,7 @@
 
     <groupId>io.curity.identityserver.plugin</groupId>
     <artifactId>identityserver.plugins.authenticators.netidaccess-os</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <name>Curity NetID Access Authenticator</name>
@@ -49,9 +49,11 @@
                 </executions>
                 <configuration>
                     <packageName>com.secmaker.netid.nias</packageName>
-                    <wsdlUrls>
-                        <wsdlUrl>https://showroom.secmaker.com/nias/ServiceServer.asmx?WSDL</wsdlUrl>
-                    </wsdlUrls>
+                    <wsdlDirectory>src/main/resources/wsdl</wsdlDirectory>
+                    <wsdlLocation>/wsdl/*</wsdlLocation>
+                    <wsdlFiles>
+                        <wsdlFile>service-server.wsdl</wsdlFile>
+                    </wsdlFiles>
                 </configuration>
             </plugin>
             <plugin>
