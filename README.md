@@ -58,17 +58,13 @@ Migrated config:
 
 ### HTTP Client
 
-The reference to a http-client now needs an `<id>` element.
-```
-<http-client>trustStoreHttpClient</http-client>
-```
+The http-client is no longer used by the plugin and can be removed from the configuration.
+Instead, there are three new settings:
 
-Migrated config:
-```
-<http-client>
-    <id>trustStoreHttpClient</id>
-</http-client>
-```
+- `Trust store` - choose the server trust store that will be used during connections to the Net ID Access service.
+- `Key Store` - you can set a client key store that will be used during connections to the Net ID Access service.
+- `use HTTP Connection` - by default connections to the Net ID Access service are done using https. Turn this option on
+  if an unsecured connection should be used instead.
 
 ## More Information
 
