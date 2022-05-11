@@ -17,10 +17,10 @@
 package io.curity.authenticator.netid.endpoints.authenticate;
 
 import com.google.common.collect.ImmutableMap;
+import io.curity.authenticator.netid.NetIdAccessServerSoapClient;
 import io.curity.authenticator.netid.client.NetIdAccessClient;
 import io.curity.authenticator.netid.PollingAuthenticatorConstants;
 import io.curity.authenticator.netid.client.WebServicePoller;
-import io.curity.authenticator.netid.injectors.NetIdAccessServerSoapFactory;
 import io.curity.authenticator.netid.model.AuthenticationCompletedResponseModel;
 import io.curity.authenticator.netid.model.LaunchRequestModel;
 import io.curity.authenticator.netid.model.LaunchResponseModel;
@@ -73,13 +73,13 @@ public final class LaunchRequestHandler implements AuthenticatorRequestHandler<L
     private final ExceptionFactory _exceptionFactory;
     private final AuthenticatedState _authenticatedState;
 
-    public LaunchRequestHandler(NetIdAccessConfig configuration, AuthenticatedState authenticatedState)
+    public LaunchRequestHandler(NetIdAccessConfig configuration, AuthenticatedState authenticatedState, NetIdAccessServerSoapClient soapClient)
     {
         _informationProvider = configuration.getAuthenticatorInformationProvider();
         _sessionManager = configuration.getSessionManager();
         _authenticatedState = authenticatedState;
         _exceptionFactory = configuration.getExceptionFactory();
-        _netIdAccessClient = new NetIdAccessClient(configuration, new NetIdAccessServerSoapFactory(configuration));
+        _netIdAccessClient = new NetIdAccessClient(configuration, soapClient);
     }
 
     @Override

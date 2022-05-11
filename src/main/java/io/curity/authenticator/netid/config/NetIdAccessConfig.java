@@ -23,7 +23,6 @@ import se.curity.identityserver.sdk.config.annotation.DefaultString;
 import se.curity.identityserver.sdk.config.annotation.Description;
 import se.curity.identityserver.sdk.config.annotation.Name;
 import se.curity.identityserver.sdk.service.ExceptionFactory;
-import se.curity.identityserver.sdk.service.HttpClient;
 import se.curity.identityserver.sdk.service.SessionManager;
 import se.curity.identityserver.sdk.service.UserPreferenceManager;
 import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformationProvider;
@@ -54,14 +53,11 @@ public interface NetIdAccessConfig extends Configuration
     Optional<ServerTrustCryptoStore> getTrustStore();
 
     @Description("The keystore that will be used in connections to Net iD Access service.")
-    Optional<ClientKeyCryptoStore> getKeyStore();
+    Optional<ClientKeyCryptoStore> getClientKeyStore();
 
     @DefaultBoolean(false)
     @Description("Whether to use an HTTP connection to the Net iD Access service. Defaults to an HTTPS connection.")
-    Boolean getUseHttpConnection();
-
-    @Description("Deprecated. The HTTP client is no longer used by the plugin. Use truststore, keystore, and 'use HTTP connection' settings instead.")
-    Optional<HttpClient> getHttpClient();
+    Boolean isDisableHttps();
 
     SessionManager getSessionManager();
 

@@ -63,7 +63,7 @@ Instead, there are three new settings:
 
 - `Trust store` - choose the server trust store that will be used during connections to the Net ID Access service.
 - `Key Store` - you can set a client key store that will be used during connections to the Net ID Access service.
-- `use HTTP Connection` - by default connections to the Net ID Access service are done using https. Turn this option on
+- `disable HTTPS` - by default connections to the Net ID Access service are done using https. Turn this option on
   if an unsecured connection should be used instead.
 
 ## More Information

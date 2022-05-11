@@ -14,11 +14,10 @@
  *  limitations under the License.
  */
 
-package io.curity.authenticator.netid.injectors;
+package io.curity.authenticator.netid;
 
 import com.secmaker.netid.nias.NetiDAccessServer;
 import com.secmaker.netid.nias.NetiDAccessServerSoap;
-import io.curity.authenticator.netid.SSLContextException;
 import io.curity.authenticator.netid.config.NetIdAccessConfig;
 import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.ws.Binding;
@@ -29,6 +28,7 @@ import jakarta.xml.ws.handler.soap.SOAPHandler;
 import jakarta.xml.ws.handler.soap.SOAPMessageContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.curity.identityserver.sdk.plugin.ManagedObject;
 import se.curity.identityserver.sdk.service.crypto.ClientKeyCryptoStore;
 import se.curity.identityserver.sdk.service.crypto.ServerTrustCryptoStore;
 
@@ -36,6 +36,7 @@ import javax.annotation.Nullable;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.xml.namespace.QName;
@@ -55,9 +56,12 @@ import java.util.Set;
 import static io.curity.authenticator.netid.utils.ClassLoaderContextUtils.withPluginClassLoader;
 import static javax.net.ssl.KeyManagerFactory.getDefaultAlgorithm;
 
-public final class NetIdAccessServerSoapFactory
+public final class NetIdAccessServerSoapClient extends ManagedObject<NetIdAccessConfig>
 {
-    private static final Logger _logger = LoggerFactory.getLogger(NetIdAccessServerSoapFactory.class);
+    private NetiDAccessServerSoap _netIDAccessServerSoap = null;
+    private final NetIdAccessConfig _config;
+
+    private static final Logger _logger = LoggerFactory.getLogger(NetIdAccessServerSoapClient.class);
 
     private static final String JAXWS_PROPERTIES_SSL_SOCKET_FACTORY = "com.sun.xml.ws.transport.https.client.SSLSocketFactory";
     private static final String JAXWS_PROPERTIES_CONNECT_TIMEOUT = "com.sun.xml.ws.connect.timeout";
@@ -67,38 +71,66 @@ public final class NetIdAccessServerSoapFactory
     private static final int CONNECT_TIMEOUT = 3000;
     private static final int REQUEST_TIMEOUT = 10000;
 
-    private final NetIdAccessConfig _config;
-
-    public NetIdAccessServerSoapFactory(NetIdAccessConfig config)
+    public NetIdAccessServerSoapClient(NetIdAccessConfig configuration)
     {
-        _config = config;
+        super(configuration);
+        _config = configuration;
     }
 
-    public NetiDAccessServerSoap create()
+    private SSLSocketFactory getSSLSocketFactory(Optional<ServerTrustCryptoStore> maybeTrustStore, Optional<ClientKeyCryptoStore> maybeClientKeyStore)
     {
-        return withPluginClassLoader(() -> {
-            NetiDAccessServer accessServer = new NetiDAccessServer();
-            NetiDAccessServerSoap proxy = accessServer.getNetiDAccessServerSoap();
-            configureWebserviceClient((BindingProvider) proxy, buildEndpointAddress(_config.getUseHttpConnection()), _config.getTrustStore(), _config.getKeyStore());
-            return proxy;
-        });
+        @Nullable TrustManager[] trustManagers = null;
+        @Nullable KeyManager[] keyManagers = null;
+
+        try
+        {
+            if (maybeTrustStore.isPresent())
+            {
+                _logger.debug("Applying ssl server-truststore from configuration.");
+
+                var trustStore = maybeTrustStore.get().getAsKeyStore();
+
+                var trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                trustManagerFactory.init(trustStore);
+                trustManagers = trustManagerFactory.getTrustManagers();
+            }
+
+            if (maybeClientKeyStore.isPresent())
+            {
+                var keyStore = maybeClientKeyStore.get();
+                _logger.debug("Applying ssl client-keystore from configuration.");
+
+                var keyManagerFactory = KeyManagerFactory.getInstance(getDefaultAlgorithm());
+                keyManagerFactory.init(keyStore.getAsKeyStore(), keyStore.getKeyStorePassword());
+                keyManagers = keyManagerFactory.getKeyManagers();
+            }
+
+            var sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(keyManagers, trustManagers, null);
+
+            return sslContext.getSocketFactory();
+        }
+        catch (KeyStoreException | NoSuchAlgorithmException | KeyManagementException | UnrecoverableKeyException e)
+        {
+            _logger.info("Could not create SSL Context: {}", e.getMessage(), e);
+            throw new SSLContextException();
+        }
     }
 
-    private static void configureWebserviceClient(BindingProvider bindingProvider,
-                                                  String endpoint,
-                                                  Optional<ServerTrustCryptoStore> trustStore,
-                                                  Optional<ClientKeyCryptoStore> keyStore)
+    private void configureWebserviceClient(BindingProvider bindingProvider,
+                                           SSLSocketFactory socketFactory)
     {
         var bindingProviderRequestContext = bindingProvider.getRequestContext();
 
         //Override the endpoint in the WSDL with the configured endpoint
-        bindingProviderRequestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
+        bindingProviderRequestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, buildEndpointAddress());
 
         bindingProviderRequestContext.put(JAXWS_PROPERTIES_CONNECT_TIMEOUT, CONNECT_TIMEOUT);
         bindingProviderRequestContext.put(JAXWS_PROPERTIES_REQUEST_TIMEOUT, REQUEST_TIMEOUT);
 
-        var sslContext = getCustomSSLContext(trustStore, keyStore);
-        bindingProvider.getRequestContext().put(JAXWS_PROPERTIES_SSL_SOCKET_FACTORY, sslContext.getSocketFactory());
+        if (!_config.isDisableHttps()) {
+            bindingProvider.getRequestContext().put(JAXWS_PROPERTIES_SSL_SOCKET_FACTORY, socketFactory);
+        }
 
         if (_logger.isTraceEnabled())
         {
@@ -152,9 +184,9 @@ public final class NetIdAccessServerSoapFactory
         }
     }
 
-    private String buildEndpointAddress(boolean useHttp)
+    private String buildEndpointAddress()
     {
-        var scheme = useHttp ? "http" : "https";
+        var scheme = _config.isDisableHttps() ? "http" : "https";
         try
         {
             return new URL(scheme, _config.getHostName(), _config.getPort(), _config.getPath()).toString();
@@ -165,44 +197,20 @@ public final class NetIdAccessServerSoapFactory
         }
     }
 
-    private static SSLContext getCustomSSLContext(
-            Optional<ServerTrustCryptoStore> trustCryptoStore,
-            Optional<ClientKeyCryptoStore> keyCryptoStore)
-
+    public NetiDAccessServerSoap getNetIDAccessServerSoap(Optional<ServerTrustCryptoStore> maybeTrustStore, Optional<ClientKeyCryptoStore> maybeClientKeyStore)
     {
-        @Nullable TrustManager[] trustManagers = null;
-        @Nullable KeyManager[] keyManagers = null;
-
-        try
-        {
-            if (trustCryptoStore.isPresent()) {
-                _logger.debug("Applying ssl server-truststore from configuration.");
-
-                var trustStore = trustCryptoStore.get().getAsKeyStore();
-
-                var trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-                trustManagerFactory.init(trustStore);
-                trustManagers = trustManagerFactory.getTrustManagers();
-            }
-
-            if (keyCryptoStore.isPresent()) {
-                var keyStore = keyCryptoStore.get();
-                _logger.debug("Applying ssl client-keystore from configuration.");
-
-                var keyManagerFactory = KeyManagerFactory.getInstance(getDefaultAlgorithm());
-                keyManagerFactory.init(keyStore.getAsKeyStore(), keyStore.getKeyStorePassword());
-                keyManagers = keyManagerFactory.getKeyManagers();
-            }
-
-            var sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(keyManagers, trustManagers, null);
-
-            return sslContext;
+        if (_netIDAccessServerSoap == null) {
+            _netIDAccessServerSoap = withPluginClassLoader(() -> {
+                NetiDAccessServer accessServer = new NetiDAccessServer();
+                NetiDAccessServerSoap proxy = accessServer.getNetiDAccessServerSoap();
+                configureWebserviceClient(
+                        (BindingProvider) proxy,
+                        getSSLSocketFactory(maybeTrustStore, maybeClientKeyStore)
+                );
+                return proxy;
+            });
         }
-        catch (KeyStoreException | NoSuchAlgorithmException | KeyManagementException | UnrecoverableKeyException e)
-        {
-            _logger.info("Could not create SSL Context: {}", e.getMessage(), e);
-            throw new SSLContextException();
-        }
+
+        return _netIDAccessServerSoap;
     }
 }
