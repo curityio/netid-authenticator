@@ -29,11 +29,22 @@ For more information about installing plugins, refer to the [curity.io/plugins](
 
 For a list of the dependencies and their versions, run `mvn dependency:list`. Ensure that all of these are installed in the plugin group; otherwise, they will not be accessible to this plug-in and run-time errors will result.
 
-## Migrating from internal plugin
+## Configuring the Plugin
+
+The plugin has the following configuration options:
+
+- `Hostname` - the hostname of the Net ID Access server.
+- `Port` - the port of the Net ID Access server.
+- `Path` - path of the Web Service endpoint.
+- `Trust store` - the server trust store that will be used during connections to the Net ID Access service. You can either provide the server's certificate, or a Certificate Authority. If left empty then the default Java trust store will be used (cacerts).
+- `Key Store` - the client key store that will be used during connections to the Net ID Access service. If left empty then the default Java key store will be used (cacerts).
+- `Disable HTTPS` - by default connections to the Net ID Access service are done using HTTPS. Turn this option on if an unsecured connection should be used instead.
+
+## Migrating from Internal Plugin
 
 If you are already running the internal Curity authenticator that was available in versions before 7.0, the configuration will need to be changed slightly.
 
-### Plugin type
+### Plugin Type
 
 The type of the plugin changed from `netidaccess` to `netidaccess-os`. This affects an xml-tag and a namespace. 
 Internal plugin config:
@@ -59,12 +70,8 @@ Migrated config:
 ### HTTP Client
 
 The http-client is no longer used by the plugin and can be removed from the configuration.
-Instead, there are three new settings:
-
-- `Trust store` - choose the server trust store that will be used during connections to the Net ID Access service.
-- `Key Store` - you can set a client key store that will be used during connections to the Net ID Access service.
-- `disable HTTPS` - by default connections to the Net ID Access service are done using https. Turn this option on
-  if an unsecured connection should be used instead.
+Instead, there are three new settings: `Trust store`, `Key store` and `disable HTTPS`. See [Configuring the Plugin](#configuring-the-plugin)
+for details.
 
 ## More Information
 

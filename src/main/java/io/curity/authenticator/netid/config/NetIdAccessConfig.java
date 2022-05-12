@@ -49,10 +49,10 @@ public interface NetIdAccessConfig extends Configuration
     @Description("Sets the full path to the Net iD Access service.")
     String getPath();
 
-    @Description("The Net iD Access service trust store.")
+    @Description("The Net iD Access service trust store. Either the server certificate or a Certificate Authority. If left empty then the default Java trust store will be used (cacerts).")
     Optional<ServerTrustCryptoStore> getTrustStore();
 
-    @Description("The keystore that will be used in connections to Net iD Access service.")
+    @Description("The key store that will be used in connections to Net iD Access service. If left empty then the default Java key store will be used (cacerts).")
     Optional<ClientKeyCryptoStore> getClientKeyStore();
 
     @DefaultBoolean(false)
