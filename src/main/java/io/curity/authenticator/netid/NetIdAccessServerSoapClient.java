@@ -128,7 +128,8 @@ public final class NetIdAccessServerSoapClient extends ManagedObject<NetIdAccess
         bindingProviderRequestContext.put(JAXWS_PROPERTIES_CONNECT_TIMEOUT, CONNECT_TIMEOUT);
         bindingProviderRequestContext.put(JAXWS_PROPERTIES_REQUEST_TIMEOUT, REQUEST_TIMEOUT);
 
-        if (!_config.isDisableHttps()) {
+        if (!_config.isDisableHttps())
+        {
             bindingProvider.getRequestContext().put(JAXWS_PROPERTIES_SSL_SOCKET_FACTORY, socketFactory);
         }
 
@@ -199,7 +200,8 @@ public final class NetIdAccessServerSoapClient extends ManagedObject<NetIdAccess
 
     public NetiDAccessServerSoap getNetIDAccessServerSoap(Optional<ServerTrustCryptoStore> maybeTrustStore, Optional<ClientKeyCryptoStore> maybeClientKeyStore)
     {
-        if (_netIDAccessServerSoap == null) {
+        if (_netIDAccessServerSoap == null)
+        {
             _netIDAccessServerSoap = withPluginClassLoader(() -> {
                 NetiDAccessServer accessServer = new NetiDAccessServer();
                 NetiDAccessServerSoap proxy = accessServer.getNetiDAccessServerSoap();
