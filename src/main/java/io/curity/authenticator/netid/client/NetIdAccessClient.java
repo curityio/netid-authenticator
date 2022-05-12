@@ -14,14 +14,13 @@
  *  limitations under the License.
  */
 
-
 package io.curity.authenticator.netid.client;
 
 import com.google.common.base.Strings;
 import com.secmaker.netid.nias.NetiDAccessServerSoap;
 import com.secmaker.netid.nias.ResultCollect;
+import io.curity.authenticator.netid.NetIdAccessServerSoapClient;
 import io.curity.authenticator.netid.config.NetIdAccessConfig;
-import io.curity.authenticator.netid.injectors.NetIdAccessServerSoapFactory;
 import jakarta.xml.ws.soap.SOAPFaultException;
 import se.curity.identityserver.sdk.Nullable;
 import se.curity.identityserver.sdk.plugin.ManagedObject;
@@ -40,11 +39,11 @@ public class NetIdAccessClient extends ManagedObject<NetIdAccessConfig> implemen
     private final ExceptionFactory _exceptionFactory;
 
     public NetIdAccessClient(NetIdAccessConfig configuration,
-                             NetIdAccessServerSoapFactory proxyFactory)
+                             NetIdAccessServerSoapClient proxyClient)
     {
         super(configuration);
         _exceptionFactory = configuration.getExceptionFactory();
-        _proxy = proxyFactory.create();
+        _proxy = proxyClient.getNetIDAccessServerSoap(configuration.getTrustStore(), configuration.getClientKeyStore());
     }
 
     @Override

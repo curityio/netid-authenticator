@@ -17,15 +17,19 @@
 package io.curity.authenticator.netid.config;
 
 import se.curity.identityserver.sdk.config.Configuration;
+import se.curity.identityserver.sdk.config.annotation.DefaultBoolean;
 import se.curity.identityserver.sdk.config.annotation.DefaultInteger;
 import se.curity.identityserver.sdk.config.annotation.DefaultString;
 import se.curity.identityserver.sdk.config.annotation.Description;
 import se.curity.identityserver.sdk.config.annotation.Name;
 import se.curity.identityserver.sdk.service.ExceptionFactory;
-import se.curity.identityserver.sdk.service.HttpClient;
 import se.curity.identityserver.sdk.service.SessionManager;
 import se.curity.identityserver.sdk.service.UserPreferenceManager;
 import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformationProvider;
+import se.curity.identityserver.sdk.service.crypto.ClientKeyCryptoStore;
+import se.curity.identityserver.sdk.service.crypto.ServerTrustCryptoStore;
+
+import java.util.Optional;
 
 public interface NetIdAccessConfig extends Configuration
 {
@@ -45,7 +49,15 @@ public interface NetIdAccessConfig extends Configuration
     @Description("Sets the full path to the Net iD Access service.")
     String getPath();
 
-    HttpClient getHttpClient();
+    @Description("The Net iD Access service trust store.")
+    Optional<ServerTrustCryptoStore> getTrustStore();
+
+    @Description("The keystore that will be used in connections to Net iD Access service.")
+    Optional<ClientKeyCryptoStore> getClientKeyStore();
+
+    @DefaultBoolean(false)
+    @Description("Whether to use an HTTP connection to the Net iD Access service. Defaults to an HTTPS connection.")
+    Boolean isDisableHttps();
 
     SessionManager getSessionManager();
 
