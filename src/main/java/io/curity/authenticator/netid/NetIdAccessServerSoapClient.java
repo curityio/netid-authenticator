@@ -28,6 +28,7 @@ import jakarta.xml.ws.handler.soap.SOAPHandler;
 import jakarta.xml.ws.handler.soap.SOAPMessageContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.curity.identityserver.sdk.ClassLoaderContextUtils;
 import se.curity.identityserver.sdk.plugin.ManagedObject;
 import se.curity.identityserver.sdk.service.crypto.ClientKeyCryptoStore;
 import se.curity.identityserver.sdk.service.crypto.ServerTrustCryptoStore;
@@ -53,7 +54,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static io.curity.authenticator.netid.utils.ClassLoaderContextUtils.withPluginClassLoader;
 import static javax.net.ssl.KeyManagerFactory.getDefaultAlgorithm;
 
 public final class NetIdAccessServerSoapClient extends ManagedObject<NetIdAccessConfig>
@@ -61,6 +61,7 @@ public final class NetIdAccessServerSoapClient extends ManagedObject<NetIdAccess
     private NetiDAccessServerSoap _netIDAccessServerSoap = null;
     private final NetIdAccessConfig _config;
 
+    private final ClassLoaderContextUtils _classLoaderContextUtils;
     private static final Logger _logger = LoggerFactory.getLogger(NetIdAccessServerSoapClient.class);
 
     private static final String JAXWS_PROPERTIES_SSL_SOCKET_FACTORY = "com.sun.xml.ws.transport.https.client.SSLSocketFactory";
@@ -75,6 +76,7 @@ public final class NetIdAccessServerSoapClient extends ManagedObject<NetIdAccess
     {
         super(configuration);
         _config = configuration;
+        _classLoaderContextUtils = new ClassLoaderContextUtils(this.getClass().getClassLoader());
     }
 
     private SSLSocketFactory getSSLSocketFactory(Optional<ServerTrustCryptoStore> maybeTrustStore, Optional<ClientKeyCryptoStore> maybeClientKeyStore)
@@ -143,7 +145,7 @@ public final class NetIdAccessServerSoapClient extends ManagedObject<NetIdAccess
                 @Override
                 public boolean handleMessage(SOAPMessageContext context)
                 {
-                    return withPluginClassLoader(() -> {
+                    return _classLoaderContextUtils.withPluginClassLoader(() -> {
                         SOAPMessage soapMessage = context.getMessage();
 
                         try
@@ -202,7 +204,7 @@ public final class NetIdAccessServerSoapClient extends ManagedObject<NetIdAccess
     {
         if (_netIDAccessServerSoap == null)
         {
-            _netIDAccessServerSoap = withPluginClassLoader(() -> {
+            _netIDAccessServerSoap = _classLoaderContextUtils.withPluginClassLoader(() -> {
                 NetiDAccessServer accessServer = new NetiDAccessServer();
                 NetiDAccessServerSoap proxy = accessServer.getNetiDAccessServerSoap();
                 configureWebserviceClient(

@@ -22,13 +22,13 @@ import com.secmaker.netid.nias.ResultCollect;
 import io.curity.authenticator.netid.NetIdAccessServerSoapClient;
 import io.curity.authenticator.netid.config.NetIdAccessConfig;
 import jakarta.xml.ws.soap.SOAPFaultException;
+import se.curity.identityserver.sdk.ClassLoaderContextUtils;
 import se.curity.identityserver.sdk.Nullable;
 import se.curity.identityserver.sdk.plugin.ManagedObject;
 import se.curity.identityserver.sdk.service.ExceptionFactory;
 
 import static com.google.common.base.Enums.getIfPresent;
 import static io.curity.authenticator.netid.client.CollectFaultStatus.INTERNAL_ERROR;
-import static io.curity.authenticator.netid.utils.ClassLoaderContextUtils.withPluginClassLoader;
 import static io.curity.authenticator.netid.utils.WebServiceUtils.callWebServiceWithRetry;
 import static se.curity.identityserver.sdk.errors.ErrorCode.EXTERNAL_SERVICE_ERROR;
 
@@ -37,6 +37,7 @@ public class NetIdAccessClient extends ManagedObject<NetIdAccessConfig> implemen
     private static final String SERVICE_NAME = "Net iD Access";
     private final NetiDAccessServerSoap _proxy;
     private final ExceptionFactory _exceptionFactory;
+    private final ClassLoaderContextUtils _classLoaderContextUtils;
 
     public NetIdAccessClient(NetIdAccessConfig configuration,
                              NetIdAccessServerSoapClient proxyClient)
@@ -44,6 +45,7 @@ public class NetIdAccessClient extends ManagedObject<NetIdAccessConfig> implemen
         super(configuration);
         _exceptionFactory = configuration.getExceptionFactory();
         _proxy = proxyClient.getNetIDAccessServerSoap(configuration.getTrustStore(), configuration.getClientKeyStore());
+        _classLoaderContextUtils = new ClassLoaderContextUtils(this.getClass().getClassLoader());
     }
 
     @Override
@@ -53,7 +55,7 @@ public class NetIdAccessClient extends ManagedObject<NetIdAccessConfig> implemen
         try
         {
             response = callWebServiceWithRetry(
-                    () -> withPluginClassLoader(() -> _proxy.collect(transactionId)),
+                    () -> _classLoaderContextUtils.withPluginClassLoader(() -> _proxy.collect(transactionId)),
                     () -> _exceptionFactory.
                             internalServerException(EXTERNAL_SERVICE_ERROR, "Failed to poll for status")).join();
         }
@@ -94,7 +96,7 @@ public class NetIdAccessClient extends ManagedObject<NetIdAccessConfig> implemen
         {
             String finalUserName = Strings.nullToEmpty(userName);
             String transactionId = callWebServiceWithRetry(
-                    () -> withPluginClassLoader(() -> _proxy.authenticate(finalUserName, null, null)),
+                    () -> _classLoaderContextUtils.withPluginClassLoader(() -> _proxy.authenticate(finalUserName, null, null, null)),
                     () -> _exceptionFactory.
                             internalServerException(EXTERNAL_SERVICE_ERROR, "Failed to start authentication")).join();
             return new AuthenticateResponse.Builder(transactionId, useSameDevice ? transactionId : "").build();
