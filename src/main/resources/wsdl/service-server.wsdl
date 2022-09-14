@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://netid.secmaker.com/nias/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://netid.secmaker.com/nias/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://netid.secmaker.com/nias/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://netid.secmaker.com/nias/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://netid.secmaker.com/nias/">
       <s:element name="Register">
@@ -9,6 +9,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="image" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="format" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="options" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -37,9 +38,10 @@
       <s:element name="Authenticate">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="personalNumber" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="personalNumber" nillable="true" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="userNonVisibleData" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="endUserInfo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="options" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -53,10 +55,11 @@
       <s:element name="Sign">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="personalNumber" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="personalNumber" nillable="true" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="userVisibleData" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="userNonVisibleData" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="endUserInfo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="options" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -70,7 +73,7 @@
       <s:element name="Collect">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="orderRef" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="orderRef" nillable="true" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -84,10 +87,11 @@
       <s:complexType name="ResultCollect">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="progressStatus" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="requestedUserId" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="signature" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="userInfo" type="tns:UserInfoType" />
           <s:element minOccurs="0" maxOccurs="1" name="ocspResponse" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="nivResponse" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="validatorResponse" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="deviceInfo" type="tns:DeviceInfoType" />
         </s:sequence>
       </s:complexType>
@@ -95,12 +99,14 @@
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="personalNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="userUniqueName" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="notBefore" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="notAfter" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="givenName" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="surname" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="certificate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="thumbprint" type="s:string" />
         </s:sequence>
       </s:complexType>
       <s:complexType name="DeviceInfoType">
@@ -234,10 +240,10 @@
   </wsdl:binding>
   <wsdl:service name="NetiDAccessServer">
     <wsdl:port name="NetiDAccessServerSoap" binding="tns:NetiDAccessServerSoap">
-      <soap:address location="https://showroom.lab.secmaker.com/nias/ServiceServer.asmx" />
+      <soap:address location="https://showroom.secmaker.com/nias/ServiceServer.asmx" />
     </wsdl:port>
     <wsdl:port name="NetiDAccessServerSoap12" binding="tns:NetiDAccessServerSoap12">
-      <soap12:address location="https://showroom.lab.secmaker.com/nias/ServiceServer.asmx" />
+      <soap12:address location="https://showroom.secmaker.com/nias/ServiceServer.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

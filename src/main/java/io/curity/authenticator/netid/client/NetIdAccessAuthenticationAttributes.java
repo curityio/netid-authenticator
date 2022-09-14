@@ -103,7 +103,7 @@ public class NetIdAccessAuthenticationAttributes extends AuthenticationAttribute
     private static void handleSubject(UserInfoType userInfo, List<Attribute> subjectAttributes)
     {
         @Nullable String personalNumber = userInfo.getPersonalNumber();
-        @Nullable String userId = userInfo.getUserId();
+        @Nullable String userId = userInfo.getUserUniqueName();
         if (personalNumber == null && userId == null)
         {
             throw new RuntimeException("Did not get a user identifier in NetiD response");

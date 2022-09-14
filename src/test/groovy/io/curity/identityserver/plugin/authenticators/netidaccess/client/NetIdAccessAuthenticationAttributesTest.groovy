@@ -80,12 +80,12 @@ class NetIdAccessAuthenticationAttributesTest extends Specification {
         attributes.subject == "198212311234"
     }
 
-    def "both personalNumber and userId are in attributes"() {
+    def "Both personalNumber and userUniqueName are in attributes"() {
         given: "A result object"
         ResultCollect collected = new ResultCollect()
         collected.progressStatus = CollectStatus.COMPLETE.name()
         UserInfoType userInfo = new UserInfoType()
-        userInfo.userId = userId
+        userInfo.userUniqueName = userUniqueName
         userInfo.personalNumber = personalNumber
         collected.userInfo = userInfo
         collected.deviceInfo = getDefaultDeviceInfo()
@@ -99,13 +99,13 @@ class NetIdAccessAuthenticationAttributesTest extends Specification {
         attributes.subjectAttributes.personalNumber?.value == expectedPersonalNumber
 
         where:
-        userId | personalNumber | expectedSubject | expectedUserId | expectedPersonalNumber
-        'ted'  | '007'          | '007'           | 'ted'          | '007'
-        null   | '007'          | '007'           | null           | '007'
-        'ted'  | null           | 'ted'           | 'ted'          | null
+        userUniqueName | personalNumber | expectedSubject | expectedUserId | expectedPersonalNumber
+        'ted'          | '007'          | '007'           | 'ted'          | '007'
+        null           | '007'          | '007'           | null           | '007'
+        'ted'          | null           | 'ted'           | 'ted'          | null
     }
 
-    def "A response without userId or personalNumber throws exception"() {
+    def "A response without userUniqueName or personalNumber throws exception"() {
         given: "A result object missing userId and personalNumber"
         ResultCollect collected = new ResultCollect()
         UserInfoType userInfo = new UserInfoType()
