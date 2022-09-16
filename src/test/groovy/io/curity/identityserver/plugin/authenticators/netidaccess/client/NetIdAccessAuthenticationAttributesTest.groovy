@@ -80,13 +80,15 @@ class NetIdAccessAuthenticationAttributesTest extends Specification {
         attributes.subject == "198212311234"
     }
 
-    def "Both personalNumber and userUniqueName are in attributes"() {
+    def "Choose proper subject when a combination of personalNumber, userId, userUniqueName, and requestedUserId is in the response"() {
         given: "A result object"
         ResultCollect collected = new ResultCollect()
         collected.progressStatus = CollectStatus.COMPLETE.name()
         UserInfoType userInfo = new UserInfoType()
         userInfo.userUniqueName = userUniqueName
         userInfo.personalNumber = personalNumber
+        userInfo.userId = userId
+        collected.requestedUserId = requestedUserId
         collected.userInfo = userInfo
         collected.deviceInfo = getDefaultDeviceInfo()
 
@@ -97,15 +99,30 @@ class NetIdAccessAuthenticationAttributesTest extends Specification {
         attributes?.subjectAttributes?.userId?.value == expectedUserId
         attributes.subject == expectedSubject
         attributes.subjectAttributes.personalNumber?.value == expectedPersonalNumber
+        attributes.subjectAttributes.userUniqueName?.value == expectedUniqueName
+        attributes.subjectAttributes.requestedUserId?.value == expectedRequestedUserId
 
+        // The subject is chosen in the following order: personalNumber -> userId -> uniqueUserName -> requestedUserId
         where:
-        userUniqueName | personalNumber | expectedSubject | expectedUserId | expectedPersonalNumber
-        'ted'          | '007'          | '007'           | 'ted'          | '007'
-        null           | '007'          | '007'           | null           | '007'
-        'ted'          | null           | 'ted'           | 'ted'          | null
+        userId | personalNumber | userUniqueName | requestedUserId || expectedSubject | expectedUserId | expectedPersonalNumber | expectedUniqueName | expectedRequestedUserId
+        'ted'  | '007'          |  'teddy'       | 'TED'           || '007'           | 'ted'          | '007'                  | 'teddy'            | 'TED'
+        'ted'  | '007'          |  'teddy'       | null            || '007'           | 'ted'          | '007'                  | 'teddy'            | null
+        null   | '007'          |  'teddy'       | 'TED'           || '007'           | null           | '007'                  | 'teddy'            | 'TED'
+        null   | '007'          |  'teddy'       | null            || '007'           | null           | '007'                  | 'teddy'            | null
+        null   | null           |  'teddy'       | 'TED'           || 'teddy'         | null           | null                   | 'teddy'            | 'TED'
+        null   | null           |  'teddy'       | null            || 'teddy'         | null           | null                   | 'teddy'            | null
+        null   | '007'          |  null          | 'TED'           || '007'           | null           | '007'                  | null               | 'TED'
+        null   | '007'          |  null          | null            || '007'           | null           | '007'                  | null               | null
+        'ted'  | null           |  null          | 'TED'           || 'ted'           | 'ted'          | null                   | null               | 'TED'
+        'ted'  | null           |  null          | null            || 'ted'           | 'ted'          | null                   | null               | null
+        'ted'  | null           |  'teddy'       | 'TED'           || 'ted'           | 'ted'          | null                   | 'teddy'            | 'TED'
+        'ted'  | null           |  'teddy'       | null            || 'ted'           | 'ted'          | null                   | 'teddy'            | null
+        'ted'  | '007'          |  null          | 'TED'           || '007'           | 'ted'          | '007'                  | null               | 'TED'
+        'ted'  | '007'          |  null          | null            || '007'           | 'ted'          | '007'                  | null               | null
+        null   | null           |  null          | 'TED'           || 'TED'           | null           | null                   | null               | 'TED'
     }
 
-    def "A response without userUniqueName or personalNumber throws exception"() {
+    def "A response without userUniqueName, userId, requestedUserId, or personalNumber throws exception"() {
         given: "A result object missing userId and personalNumber"
         ResultCollect collected = new ResultCollect()
         UserInfoType userInfo = new UserInfoType()
