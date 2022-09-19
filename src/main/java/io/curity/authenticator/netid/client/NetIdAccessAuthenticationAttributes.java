@@ -76,7 +76,7 @@ public class NetIdAccessAuthenticationAttributes extends AuthenticationAttribute
         UserInfoType userInfo = valueOrError(result.getUserInfo(), "Did not get UserInfo in response");
 
         List<Attribute> subjectAttributes = new ArrayList<>(3);
-        handleSubject(userInfo, subjectAttributes);
+        handleSubject(userInfo, result.getRequestedUserId(), subjectAttributes);
 
         Map<String, String> nameMap = new HashMap<>();
         ifNotNull(userInfo.getGivenName(), givenName -> nameMap.put(Name.GIVEN_NAME, givenName));
@@ -100,19 +100,22 @@ public class NetIdAccessAuthenticationAttributes extends AuthenticationAttribute
         return SubjectAttributes.of(subjectAttributes);
     }
 
-    private static void handleSubject(UserInfoType userInfo, List<Attribute> subjectAttributes)
+    private static void handleSubject(UserInfoType userInfo, @Nullable String requestedUserId, List<Attribute> subjectAttributes)
     {
         @Nullable String personalNumber = userInfo.getPersonalNumber();
         @Nullable String userId = userInfo.getUserId();
-        if (personalNumber == null && userId == null)
+        @Nullable String userUniqueName = userInfo.getUserUniqueName();
+        if (personalNumber == null && userId == null && userUniqueName == null && requestedUserId == null)
         {
             throw new RuntimeException("Did not get a user identifier in NetiD response");
         }
 
-        String subject = personalNumber != null ? personalNumber : userId;
+        String subject = personalNumber != null ? personalNumber : (userId != null ? userId : (userUniqueName != null ? userUniqueName : requestedUserId));
         subjectAttributes.add(Attribute.of(SUBJECT, subject));
         ifNotNull(userId, id -> subjectAttributes.add(Attribute.of("userId", id)));
         ifNotNull(personalNumber, pn -> subjectAttributes.add(Attribute.of("personalNumber", pn)));
+        ifNotNull(userUniqueName, un -> subjectAttributes.add(Attribute.of("userUniqueName", un)));
+        ifNotNull(requestedUserId, ruid -> subjectAttributes.add(Attribute.of("requestedUserId", ruid)));
     }
 
     private static ContextAttributes getContextAttributes(ResultCollect result)

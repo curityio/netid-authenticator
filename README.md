@@ -40,6 +40,15 @@ The plugin has the following configuration options:
 - `Key Store` - the client key store that will be used during connections to the Net ID Access service. If left empty then the default Java key store will be used (cacerts).
 - `Disable HTTPS` - by default connections to the Net ID Access service are done using HTTPS. Turn this option on if an unsecured connection should be used instead.
 
+## Handling the Subject
+
+The plugin sets a number of subject attributes based on the data it gets from NetID. Among these attributes are a few that can be picked up as the `subject` attribute. If any of the following attributes is present, it will be used as the `subject` attribute, in the following priority:
+
+1. `personalNumber` from the `ResultCollect`->`userInfo` element
+2. `userId` from the `ResultCollect`->`userInfo` element
+3. `userUniqueName` from the `ResultCollect`->`userInfo` element
+4. `requestedUserId` from the `ResultCollect` element
+
 ## Migrating from Internal Plugin
 
 If you are already running the internal Curity authenticator that was available in versions before 7.0, the configuration will need to be changed slightly.
