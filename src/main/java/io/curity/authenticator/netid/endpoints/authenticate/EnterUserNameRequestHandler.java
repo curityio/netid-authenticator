@@ -285,6 +285,9 @@ public final class EnterUserNameRequestHandler
                 case ALREADY_IN_PROGRESS:
                     _logger.trace("Call to {} service failed as authentication is already in progress",
                             serviceName);
+                case USER_BLOCKED:
+                    _logger.trace("Call to {} service failed as authentication has been temporarily blocked",
+                            serviceName);
                 default:
                     _logger.debug("Call to {} service failed with status: {}", serviceName,
                             Throwables.getRootCause(e).getMessage());

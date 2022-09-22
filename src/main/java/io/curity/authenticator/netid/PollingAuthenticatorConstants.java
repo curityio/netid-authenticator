@@ -67,6 +67,12 @@ public class PollingAuthenticatorConstants
         public static final String UNKNOWN_PERSONAL_NUMBER = "cur3";
 
         /**
+         * Blocks authentication requests during the specified request block time if a user has an active authentication request
+         * and a new request is issued. Request block time is set in server's settings.xml.
+         */
+        public static final String USER_BLOCKED="cur4";
+
+        /**
          * Start your authenticator app
          */
         public static final String START_APP = "rfa1";
