@@ -35,7 +35,7 @@ import se.curity.identityserver.sdk.web.ResponseModel;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.START_APP;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.start_app;
 import static io.curity.authenticator.netid.PollingAuthenticatorConstants.FormValueNames.CANCEL_URL;
 import static io.curity.authenticator.netid.PollingAuthenticatorConstants.FormValueNames.FAILURE_URL;
 import static io.curity.authenticator.netid.PollingAuthenticatorConstants.FormValueNames.POLL_URL;
@@ -89,7 +89,7 @@ public final class WaitRequestHandler implements AuthenticatorRequestHandler<Wai
     {
         var authenticationUri = _config.getAuthenticatorInformationProvider().getFullyQualifiedAuthenticationUri();
         ImmutableMap.Builder<String, Object> map = ImmutableMap.<String, Object>builder()
-                .put(SERVICE_MESSAGE, START_APP)
+                .put(SERVICE_MESSAGE, start_app)
                 .put(ACTION, authenticationUri.getPath() + "/" + _pollerPaths.getPollerPath() + "?" + authenticationUri.getQuery())
                 .put(RESTART_URL, authenticationUri.getPath())
                 .put(CANCEL_URL, authenticationUri + "/" + _pollerPaths.getCancelPath())

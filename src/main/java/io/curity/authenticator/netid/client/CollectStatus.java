@@ -20,16 +20,16 @@ package io.curity.authenticator.netid.client;
 
 import io.curity.authenticator.netid.PollingAuthenticatorConstants;
 
-import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.NO_APP;
-import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.NO_APP_TRY_OTHER_DEVICE;
-import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.START_APP;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.no_app;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.no_app_try_other_device;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.start_app;
 
 public enum CollectStatus
 {
-    OUTSTANDING_TRANSACTION(PollingAuthenticatorConstants.EndUserMessageKeys.OUTSTANDING_TRANSACTION, START_APP),
-    NO_CLIENT(START_APP),
-    STARTED(NO_APP_TRY_OTHER_DEVICE, NO_APP),
-    USER_SIGN(PollingAuthenticatorConstants.EndUserMessageKeys.USER_SIGN),
+    OUTSTANDING_TRANSACTION(PollingAuthenticatorConstants.EndUserMessageKeys.outstanding_transaction, start_app),
+    NO_CLIENT(start_app),
+    STARTED(no_app_try_other_device, no_app),
+    USER_SIGN(PollingAuthenticatorConstants.EndUserMessageKeys.user_sign),
     COMPLETE(""),
     PENDING(""),
     FAILED("");
