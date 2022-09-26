@@ -19,8 +19,8 @@ package io.curity.authenticator.netid.client;
 
 import io.curity.authenticator.netid.PollingAuthenticatorConstants;
 
-import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.unknown_error;
-import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.unknown_personal_number;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.UNKNOWN_ERROR;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.UNKNOWN_PERSONAL_NUMBER;
 
 /**
  * Represents an error received from the server during the authentication call
@@ -28,15 +28,15 @@ import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUse
 @SuppressWarnings("unused")
 public enum AuthenticationFaultStatus
 {
-    UNKNOWN(unknown_error),
-    UNKNOWN_USER(unknown_personal_number),
-    INVALID_PARAMETERS(PollingAuthenticatorConstants.EndUserMessageKeys.invalid_parameters),
-    ACCESS_DENIED_RP(PollingAuthenticatorConstants.EndUserMessageKeys.access_denied_rp),
-    SIGN_VALIDATION_FAILED(PollingAuthenticatorConstants.EndUserMessageKeys.internal_error),
-    RETRY(PollingAuthenticatorConstants.EndUserMessageKeys.internal_error),
-    INTERNAL_ERROR(PollingAuthenticatorConstants.EndUserMessageKeys.internal_error),
-    ALREADY_IN_PROGRESS(PollingAuthenticatorConstants.EndUserMessageKeys.in_progress),
-    USER_BLOCKED(PollingAuthenticatorConstants.EndUserMessageKeys.user_blocked);
+    UNKNOWN(UNKNOWN_ERROR),
+    UNKNOWN_USER(UNKNOWN_PERSONAL_NUMBER),
+    INVALID_PARAMETERS(PollingAuthenticatorConstants.EndUserMessageKeys.INVALID_PARAMETERS),
+    ACCESS_DENIED_RP(PollingAuthenticatorConstants.EndUserMessageKeys.ACCESS_DENIED_RP),
+    SIGN_VALIDATION_FAILED(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
+    RETRY(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
+    INTERNAL_ERROR(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
+    ALREADY_IN_PROGRESS(PollingAuthenticatorConstants.EndUserMessageKeys.IN_PROGRESS),
+    USER_BLOCKED(PollingAuthenticatorConstants.EndUserMessageKeys.USER_BLOCKED);
     /**
      * Message key to show user
      */

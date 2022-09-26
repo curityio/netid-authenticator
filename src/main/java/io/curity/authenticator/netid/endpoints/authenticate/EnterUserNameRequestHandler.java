@@ -298,7 +298,7 @@ public final class EnterUserNameRequestHandler
         {
             _logger.error("Call to {} service produced an unexpected error", serviceName, e);
 
-            throw reportFailure(PollingAuthenticatorConstants.EndUserMessageKeys.internal_error);
+            throw reportFailure(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR);
         }
     }
 

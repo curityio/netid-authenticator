@@ -56,102 +56,102 @@ public class PollingAuthenticatorConstants
         /**
          * An error has occurred (1). Try again.
          */
-        public static final String access_denied_rp = "cur1";
+        public static final String ACCESS_DENIED_RP = "access_denied_rp";
         /**
          * An error has occurred (2). Try again.
          */
-        public static final String invalid_parameters = "cur2";
+        public static final String INVALID_PARAMETERS = "invalid_parameters";
         /**
          * Wrong personal number.
          */
-        public static final String unknown_personal_number = "cur3";
+        public static final String UNKNOWN_PERSONAL_NUMBER = "unknown_personal_number";
 
         /**
          * Blocks authentication requests during the specified request block time if a user has an active authentication request
          * and a new request is issued. Request block time is set in server's settings.xml.
          */
-        public static final String user_blocked ="cur4";
+        public static final String USER_BLOCKED ="user_blocked";
 
         /**
          * Start your authenticator app
          */
-        public static final String start_app = "rfa1";
+        public static final String START_APP = "start_app";
 
         /**
          * Action cancelled. Please try again
          */
-        public static final String cancelled = "rfa3";
+        public static final String CANCELLED = "cancelled";
 
         /**
          * Internal error. Please try again
          */
-        public static final String internal_error = "rfa5";
+        public static final String INTERNAL_ERROR = "internal_error";
 
         /**
          * Action cancelled
          */
-        public static final String user_cancelled = "rfa6";
+        public static final String USER_CANCELLED = "user_cancelled";
 
         /**
          * The authenticator app is not responding.
          * Please check that the program is started and that you have internet access, then try again
          */
-        public static final String expired_transaction = "rfa8";
+        public static final String EXPIRED_TRANSACTION = "expired_transaction";
 
         /**
          * Enter your security code in the authenticator app and select Identify or Sign
          */
-        public static final String user_sign = "rfa9";
+        public static final String USER_SIGN = "user_sign";
 
         /**
          * Internal error. Update your authenticator app and try again
          */
-        public static final String client_error = "rfa12";
+        public static final String CLIENT_ERROR = "client_error";
 
         /**
          * Trying to start your authenticator app
          */
-        public static final String outstanding_transaction = "rfa13";
+        public static final String OUTSTANDING_TRANSACTION = "outstanding_transaction";
 
         /**
          * You do not have an ID which can be used for this login/signature on this computer.
          * If you have a smart card, please insert it into your card reader.
          * If you have an ID on another device you can start the authenticator app on that device
          */
-        public static final String no_app = "rfa14";
+        public static final String NO_APP = "no_app";
 
         /**
          * You do not have an ID which can be used for this login/signature on this computer.
          * If you have a smart card, please insert it into your card reader.
          */
-        public static final String no_app_try_other_device = "rfa15";
+        public static final String NO_APP_TRY_OTHER_DEVICE = "no_app_try_other_device";
 
         /**
          * The ID you are trying to use is revoked or too old.
          * Please use another id or order a new one
          */
-        public static final String certificate_error = "rfa16";
+        public static final String CERTIFICATE_ERROR = "certificate_error";
 
         /**
          * The authenticator app couldn't be found on your computer or mobile device.
          * Please install it and order a new Net iD
          */
-        public static final String start_failed = "rfa17";
+        public static final String START_FAILED = "start_failed";
 
         /**
          * An error has occurred (3).
          */
-        public static final String unknown_error = "unknown";
+        public static final String UNKNOWN_ERROR = "unknown_error";
 
         /**
          * General error
          */
-        public static final String general_error = "validation.error.general";
+        public static final String GENERAL_ERROR = "validation.error.general";
 
         /**
          * An order is already in progress.
          */
-        public static final String in_progress = "inprogress";
+        public static final String IN_PROGRESS = "inprogress";
     }
 
     public static class SessionKeys

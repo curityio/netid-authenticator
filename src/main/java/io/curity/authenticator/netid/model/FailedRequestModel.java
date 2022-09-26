@@ -26,7 +26,7 @@ import se.curity.identityserver.sdk.web.Request;
 
 import javax.annotation.Nullable;
 
-import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.unknown_error;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.UNKNOWN_ERROR;
 
 public final class FailedRequestModel
 {
@@ -70,14 +70,14 @@ public final class FailedRequestModel
                 {
                     throw new InvalidParameterException(PollingAuthenticatorConstants.FormValueNames.ERROR_MESSAGE, "Invalid parameter");
                 }
-                _incomingErrorMessage = listOfMessages.stream().findFirst().orElse(unknown_error);
+                _incomingErrorMessage = listOfMessages.stream().findFirst().orElse(UNKNOWN_ERROR);
             }
             else
             {
-                _incomingErrorMessage = unknown_error;
+                _incomingErrorMessage = UNKNOWN_ERROR;
             }
 
-            if (_incomingErrorMessage.equals(unknown_error))
+            if (_incomingErrorMessage.equals(UNKNOWN_ERROR))
             {
                 @Nullable var messageFromSession = sessionManager.get(PollingAuthenticatorConstants.SessionKeys.ERROR_MESSAGE);
 
@@ -87,7 +87,7 @@ public final class FailedRequestModel
                 }
                 else
                 {
-                    _errorMessage = unknown_error;
+                    _errorMessage = UNKNOWN_ERROR;
                 }
             }
             else
@@ -99,9 +99,9 @@ public final class FailedRequestModel
         @NotEmpty
         public String getErrorMessage()
         {
-            @Nullable String errorMessage = _incomingErrorMessage.equals(unknown_error) ? _errorMessage : _incomingErrorMessage;
+            @Nullable String errorMessage = _incomingErrorMessage.equals(UNKNOWN_ERROR) ? _errorMessage : _incomingErrorMessage;
 
-            return errorMessage == null || "[object Object]".equals(errorMessage) ? unknown_error : errorMessage;
+            return errorMessage == null || "[object Object]".equals(errorMessage) ? UNKNOWN_ERROR : errorMessage;
         }
     }
 }

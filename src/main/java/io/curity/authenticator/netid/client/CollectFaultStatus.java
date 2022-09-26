@@ -19,7 +19,7 @@ package io.curity.authenticator.netid.client;
 
 import io.curity.authenticator.netid.PollingAuthenticatorConstants;
 
-import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.user_cancelled;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.USER_CANCELLED;
 
 /**
  * Represents an error received from the server during the collect call
@@ -27,16 +27,16 @@ import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUse
 @SuppressWarnings("unused")
 public enum CollectFaultStatus
 {
-    ACCESS_DENIED_RP(PollingAuthenticatorConstants.EndUserMessageKeys.access_denied_rp, false),
-    INVALID_PARAMETERS(PollingAuthenticatorConstants.EndUserMessageKeys.invalid_parameters, false),
-    CLIENT_ERR(PollingAuthenticatorConstants.EndUserMessageKeys.client_error, true),
-    CERTIFICATE_ERR(PollingAuthenticatorConstants.EndUserMessageKeys.certificate_error, true),
-    RETRY(PollingAuthenticatorConstants.EndUserMessageKeys.internal_error, true),
-    INTERNAL_ERROR(PollingAuthenticatorConstants.EndUserMessageKeys.internal_error, true),
-    EXPIRED_TRANSACTION(PollingAuthenticatorConstants.EndUserMessageKeys.expired_transaction, true),
-    USER_CANCEL(user_cancelled, true),
-    CANCELLED(PollingAuthenticatorConstants.EndUserMessageKeys.cancelled, true),
-    START_FAILED(PollingAuthenticatorConstants.EndUserMessageKeys.start_failed, true);
+    ACCESS_DENIED_RP(PollingAuthenticatorConstants.EndUserMessageKeys.ACCESS_DENIED_RP, false),
+    INVALID_PARAMETERS(PollingAuthenticatorConstants.EndUserMessageKeys.INVALID_PARAMETERS, false),
+    CLIENT_ERR(PollingAuthenticatorConstants.EndUserMessageKeys.CLIENT_ERROR, true),
+    CERTIFICATE_ERR(PollingAuthenticatorConstants.EndUserMessageKeys.CERTIFICATE_ERROR, true),
+    RETRY(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR, true),
+    INTERNAL_ERROR(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR, true),
+    EXPIRED_TRANSACTION(PollingAuthenticatorConstants.EndUserMessageKeys.EXPIRED_TRANSACTION, true),
+    USER_CANCEL(USER_CANCELLED, true),
+    CANCELLED(PollingAuthenticatorConstants.EndUserMessageKeys.CANCELLED, true),
+    START_FAILED(PollingAuthenticatorConstants.EndUserMessageKeys.START_FAILED, true);
 
     /**
      * Message key to show user

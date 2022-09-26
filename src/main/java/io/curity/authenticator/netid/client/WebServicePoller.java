@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.general_error;
+import static io.curity.authenticator.netid.PollingAuthenticatorConstants.EndUserMessageKeys.GENERAL_ERROR;
 import static io.curity.authenticator.netid.PollingAuthenticatorConstants.FormValueNames.RESTART_URL;
 import static io.curity.authenticator.netid.PollingAuthenticatorConstants.SessionKeys.AUTHENTICATION_STATE;
 import static io.curity.authenticator.netid.PollingAuthenticatorConstants.SessionKeys.ERROR_MESSAGE;
@@ -146,7 +146,7 @@ public class WebServicePoller
     private void pollFailed(Response response, @Nullable CollectFaultStatus collectFaultStatus)
     {
         String messageId = collectFaultStatus == null
-                ? general_error
+                ? GENERAL_ERROR
                 : collectFaultStatus.getMessageId();
 
         _logger.trace("Saving error message: {}", messageId);
