@@ -56,15 +56,15 @@ public class PollingAuthenticatorConstants
         /**
          * An error has occurred (1). Try again.
          */
-        public static final String ACCESS_DENIED_RP = "access_denied_rp";
+        public static final String ACCESS_DENIED_RP = "cur1";
         /**
          * An error has occurred (2). Try again.
          */
-        public static final String INVALID_PARAMETERS = "invalid_parameters";
+        public static final String INVALID_PARAMETERS = "cur2";
         /**
          * Wrong personal number.
          */
-        public static final String UNKNOWN_PERSONAL_NUMBER = "unknown_personal_number";
+        public static final String UNKNOWN_PERSONAL_NUMBER = "cur3";
 
         /**
          * Blocks authentication requests during the specified request block time if a user has an active authentication request
@@ -75,73 +75,73 @@ public class PollingAuthenticatorConstants
         /**
          * Start your authenticator app
          */
-        public static final String START_APP = "start_app";
+        public static final String START_APP = "rfa1";
 
         /**
          * Action cancelled. Please try again
          */
-        public static final String CANCELLED = "cancelled";
+        public static final String CANCELLED = "rfa3";
 
         /**
          * Internal error. Please try again
          */
-        public static final String INTERNAL_ERROR = "internal_error";
+        public static final String INTERNAL_ERROR = "rfa5";
 
         /**
          * Action cancelled
          */
-        public static final String USER_CANCELLED = "user_cancelled";
+        public static final String USER_CANCELLED = "rfa6";
 
         /**
          * The authenticator app is not responding.
          * Please check that the program is started and that you have internet access, then try again
          */
-        public static final String EXPIRED_TRANSACTION = "expired_transaction";
+        public static final String EXPIRED_TRANSACTION = "rfa8";
 
         /**
          * Enter your security code in the authenticator app and select Identify or Sign
          */
-        public static final String USER_SIGN = "user_sign";
+        public static final String USER_SIGN = "rfa9";
 
         /**
          * Internal error. Update your authenticator app and try again
          */
-        public static final String CLIENT_ERROR = "client_error";
+        public static final String CLIENT_ERROR = "rfa12";
 
         /**
          * Trying to start your authenticator app
          */
-        public static final String OUTSTANDING_TRANSACTION = "outstanding_transaction";
+        public static final String OUTSTANDING_TRANSACTION = "rfa13";
 
         /**
          * You do not have an ID which can be used for this login/signature on this computer.
          * If you have a smart card, please insert it into your card reader.
          * If you have an ID on another device you can start the authenticator app on that device
          */
-        public static final String NO_APP = "no_app";
+        public static final String NO_APP = "rfa14";
 
         /**
          * You do not have an ID which can be used for this login/signature on this computer.
          * If you have a smart card, please insert it into your card reader.
          */
-        public static final String NO_APP_TRY_OTHER_DEVICE = "no_app_try_other_device";
+        public static final String NO_APP_TRY_OTHER_DEVICE = "rfa15";
 
         /**
          * The ID you are trying to use is revoked or too old.
          * Please use another id or order a new one
          */
-        public static final String CERTIFICATE_ERROR = "certificate_error";
+        public static final String CERTIFICATE_ERROR = "rfa16";
 
         /**
          * The authenticator app couldn't be found on your computer or mobile device.
          * Please install it and order a new Net iD
          */
-        public static final String START_FAILED = "start_failed";
+        public static final String START_FAILED = "rfa17";
 
         /**
          * An error has occurred (3).
          */
-        public static final String UNKNOWN_ERROR = "unknown_error";
+        public static final String UNKNOWN_ERROR = "unknown";
 
         /**
          * General error
