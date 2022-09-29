@@ -67,6 +67,12 @@ public class PollingAuthenticatorConstants
         public static final String UNKNOWN_PERSONAL_NUMBER = "cur3";
 
         /**
+         * Blocks authentication requests during the specified request block time if a user has an active authentication request
+         * and a new request is issued. Request block time is set in server's settings.xml.
+         */
+        public static final String USER_BLOCKED ="user_blocked";
+
+        /**
          * Start your authenticator app
          */
         public static final String START_APP = "rfa1";
@@ -100,7 +106,7 @@ public class PollingAuthenticatorConstants
         /**
          * Internal error. Update your authenticator app and try again
          */
-        public static final String CLIENT_ERR = "rfa12";
+        public static final String CLIENT_ERROR = "rfa12";
 
         /**
          * Trying to start your authenticator app
@@ -124,7 +130,7 @@ public class PollingAuthenticatorConstants
          * The ID you are trying to use is revoked or too old.
          * Please use another id or order a new one
          */
-        public static final String CERTIFICATE_ERR = "rfa16";
+        public static final String CERTIFICATE_ERROR = "rfa16";
 
         /**
          * The authenticator app couldn't be found on your computer or mobile device.

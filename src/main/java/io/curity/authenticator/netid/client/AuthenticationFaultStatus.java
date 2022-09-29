@@ -35,7 +35,8 @@ public enum AuthenticationFaultStatus
     SIGN_VALIDATION_FAILED(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
     RETRY(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
     INTERNAL_ERROR(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR),
-    ALREADY_IN_PROGRESS(PollingAuthenticatorConstants.EndUserMessageKeys.IN_PROGRESS);
+    ALREADY_IN_PROGRESS(PollingAuthenticatorConstants.EndUserMessageKeys.IN_PROGRESS),
+    USER_BLOCKED(PollingAuthenticatorConstants.EndUserMessageKeys.USER_BLOCKED);
     /**
      * Message key to show user
      */

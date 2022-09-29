@@ -29,8 +29,8 @@ public enum CollectFaultStatus
 {
     ACCESS_DENIED_RP(PollingAuthenticatorConstants.EndUserMessageKeys.ACCESS_DENIED_RP, false),
     INVALID_PARAMETERS(PollingAuthenticatorConstants.EndUserMessageKeys.INVALID_PARAMETERS, false),
-    CLIENT_ERR(PollingAuthenticatorConstants.EndUserMessageKeys.CLIENT_ERR, true),
-    CERTIFICATE_ERR(PollingAuthenticatorConstants.EndUserMessageKeys.CERTIFICATE_ERR, true),
+    CLIENT_ERR(PollingAuthenticatorConstants.EndUserMessageKeys.CLIENT_ERROR, true),
+    CERTIFICATE_ERR(PollingAuthenticatorConstants.EndUserMessageKeys.CERTIFICATE_ERROR, true),
     RETRY(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR, true),
     INTERNAL_ERROR(PollingAuthenticatorConstants.EndUserMessageKeys.INTERNAL_ERROR, true),
     EXPIRED_TRANSACTION(PollingAuthenticatorConstants.EndUserMessageKeys.EXPIRED_TRANSACTION, true),

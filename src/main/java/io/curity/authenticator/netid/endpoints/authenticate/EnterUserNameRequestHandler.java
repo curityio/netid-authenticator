@@ -283,7 +283,10 @@ public final class EnterUserNameRequestHandler
                     _logger.debug("Call to {} service failed: Unknown user id", serviceName);
                     throw new UnknownUserNameException(e.getStatus());
                 case ALREADY_IN_PROGRESS:
-                    _logger.trace("Call to {} service failed as authentication is already in progress",
+                    _logger.debug("Call to {} service failed as authentication is already in progress",
+                            serviceName);
+                case USER_BLOCKED:
+                    _logger.debug("Call to {} service failed as authentication has been temporarily blocked due to multiple requests for the same account",
                             serviceName);
                 default:
                     _logger.debug("Call to {} service failed with status: {}", serviceName,
